@@ -340,15 +340,16 @@ VITE_STRIPE_PUBLISHABLE_KEY=pk_live_tu_publishable_key_de_produccion
 
 ## 🛠️ Tecnologías Utilizadas
 
-- **Frontend**: React 18, TypeScript, TailwindCSS
+- **Frontend**: React 18, JavaScript (ES6+), CSS Modules
 - **Animaciones**: GSAP
 - **Autenticación**: Supabase Auth
 - **Base de datos**: PostgreSQL (via Supabase)
 - **Pagos**: Stripe Checkout
 - **QR Codes**: qrcode.react
 - **Routing**: React Router v6
-- **Estado**: React Query
-- **UI Components**: shadcn/ui + Radix UI
+- **Estado**: React Hooks
+- **Formularios**: React Hook Form + Zod
+- **UI Components**: Radix UI
 
 ---
 

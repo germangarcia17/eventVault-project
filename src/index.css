@@ -1,95 +1,88 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
 All colors MUST be HSL.
+Inspired by thescotch.org - Bold, theatrical, high contrast design
 */
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 10%;
+:root {
+  /* Dark dramatic theme inspired by thescotch.org */
+  --background: 0 0% 7%;
+  --foreground: 0 0% 98%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 10%;
+  --card: 0 0% 10%;
+  --card-foreground: 0 0% 98%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 10%;
+  --popover: 0 0% 10%;
+  --popover-foreground: 0 0% 98%;
 
-    --primary: 250 80% 60%;
-    --primary-foreground: 0 0% 100%;
-    --primary-glow: 250 90% 70%;
+  /* Yellow/Gold primary color like thescotch.org */
+  --primary: 45 100% 55%;
+  --primary-foreground: 0 0% 10%;
+  --primary-glow: 45 100% 65%;
 
-    --secondary: 180 70% 55%;
-    --secondary-foreground: 0 0% 100%;
+  /* Red accent for urgency */
+  --secondary: 0 80% 55%;
+  --secondary-foreground: 0 0% 100%;
 
-    --muted: 240 5% 96%;
-    --muted-foreground: 240 4% 46%;
+  --muted: 0 0% 20%;
+  --muted-foreground: 0 0% 70%;
 
-    --accent: 280 75% 65%;
-    --accent-foreground: 0 0% 100%;
+  --accent: 45 100% 55%;
+  --accent-foreground: 0 0% 10%;
 
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
 
-    --border: 240 6% 90%;
-    --input: 240 6% 90%;
-    --ring: 250 80% 60%;
+  --border: 0 0% 20%;
+  --input: 0 0% 15%;
+  --ring: 45 100% 55%;
 
-    --radius: 0.75rem;
+  --radius: 0.5rem;
 
-    --gradient-hero: linear-gradient(135deg, hsl(250 80% 60%) 0%, hsl(280 75% 65%) 100%);
-    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(240 5% 98%) 100%);
-    --shadow-glow: 0 10px 40px -10px hsl(250 80% 60% / 0.3);
-    --shadow-card: 0 4px 20px -4px hsl(240 10% 10% / 0.08);
-    
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .dark {
-    --background: 240 10% 8%;
-    --foreground: 0 0% 98%;
-
-    --card: 240 8% 12%;
-    --card-foreground: 0 0% 98%;
-
-    --popover: 240 8% 12%;
-    --popover-foreground: 0 0% 98%;
-
-    --primary: 250 80% 65%;
-    --primary-foreground: 0 0% 100%;
-    --primary-glow: 250 90% 75%;
-
-    --secondary: 180 70% 55%;
-    --secondary-foreground: 0 0% 100%;
-
-    --muted: 240 8% 20%;
-    --muted-foreground: 240 5% 65%;
-
-    --accent: 280 75% 65%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 240 8% 20%;
-    --input: 240 8% 20%;
-    --ring: 250 80% 65%;
-
-    --gradient-hero: linear-gradient(135deg, hsl(250 80% 65%) 0%, hsl(280 75% 70%) 100%);
-    --gradient-card: linear-gradient(180deg, hsl(240 8% 12%) 0%, hsl(240 8% 14%) 100%);
-    --shadow-glow: 0 10px 40px -10px hsl(250 80% 65% / 0.4);
-    --shadow-card: 0 4px 20px -4px hsl(0 0% 0% / 0.3);
-  }
+  /* Dramatic gradients */
+  --gradient-hero: linear-gradient(135deg, hsl(0 0% 5%) 0%, hsl(0 0% 15%) 100%);
+  --gradient-card: linear-gradient(180deg, hsl(0 0% 10%) 0%, hsl(0 0% 8%) 100%);
+  --gradient-gold: linear-gradient(135deg, hsl(45 100% 55%) 0%, hsl(38 100% 50%) 100%);
+  --shadow-glow: 0 0 40px hsl(45 100% 55% / 0.5);
+  --shadow-glow-strong: 0 0 60px hsl(45 100% 55% / 0.7);
+  --shadow-card: 0 8px 32px hsl(0 0% 0% / 0.6);
+  --shadow-text: 0 2px 10px hsl(0 0% 0% / 0.8);
+  
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  border-color: hsl(var(--border));
+}
 
-  body {
-    @apply bg-background text-foreground;
-  }
+body {
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: 'Oswald', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3 {
+  font-family: 'Bebas Neue', 'Anton', 'Oswald', sans-serif;
+  letter-spacing: 0.02em;
+}
+
+/* Utility classes */
+.text-glow {
+  text-shadow: var(--shadow-glow);
+}
+
+.text-glow-strong {
+  text-shadow: var(--shadow-glow-strong);
+}
+
+.bg-gradient-gold {
+  background: var(--gradient-gold);
+}
+
+.shadow-dramatic {
+  box-shadow: var(--shadow-card);
 }

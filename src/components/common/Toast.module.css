@@ -1,0 +1,138 @@
+.viewport {
+  position: fixed;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  max-height: 100vh;
+  width: 100%;
+  flex-direction: column-reverse;
+  padding: 1rem;
+  margin: 0 auto;
+  list-style: none;
+}
+
+@media (min-width: 640px) {
+  .viewport {
+    top: auto;
+    right: 0;
+    bottom: 0;
+    flex-direction: column;
+    max-width: 420px;
+  }
+}
+
+.toast {
+  position: relative;
+  display: grid;
+  width: 100%;
+  grid-template-columns: auto max-content;
+  align-items: center;
+  gap: 0.75rem;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  border: 1px solid hsl(0, 0%, 20%);
+  padding: 1rem 1.5rem;
+  background: hsl(0, 0%, 4%);
+  color: hsl(0, 0%, 98%);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  pointer-events: auto;
+  transition: all 0.2s;
+}
+
+.toast[data-state="open"] {
+  animation: slideIn 0.2s ease-out;
+}
+
+.toast[data-state="closed"] {
+  animation: slideOut 0.2s ease-in;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(calc(100% + 1rem));
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(100% + 1rem));
+  }
+}
+
+.toast.destructive {
+  border-color: hsl(0, 62.8%, 30.6%);
+  background: hsl(0, 62.8%, 20.6%);
+  color: hsl(0, 85.7%, 97.3%);
+}
+
+.action {
+  display: inline-flex;
+  height: 2rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.375rem;
+  border: 1px solid hsl(0, 0%, 20%);
+  background: transparent;
+  padding: 0 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: hsl(0, 0%, 98%);
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.action:hover {
+  background: hsl(0, 0%, 15%);
+}
+
+.action:focus-visible {
+  outline: 2px solid hsl(0, 0%, 98%);
+  outline-offset: 2px;
+}
+
+.close {
+  position: absolute;
+  right: 0.5rem;
+  top: 0.5rem;
+  border-radius: 0.375rem;
+  padding: 0.25rem;
+  color: hsl(0, 0%, 70%);
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+}
+
+.close:hover {
+  opacity: 1;
+}
+
+.close:focus-visible {
+  outline: 2px solid hsl(0, 0%, 98%);
+  outline-offset: 2px;
+}
+
+.closeIcon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+}
+
+.description {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  opacity: 0.9;
+}

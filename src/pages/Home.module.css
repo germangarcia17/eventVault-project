@@ -1,0 +1,780 @@
+/* Home page styles */
+.container {
+  margin-left: -1rem;
+  margin-right: -1rem;
+}
+
+@media (min-width: 768px) {
+  .container {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+.sectionSpacing {
+  display: flex;
+  flex-direction: column;
+  gap: 6rem;
+}
+
+/* Hero Section */
+.heroSection {
+  position: relative;
+  min-height: 85vh;
+  overflow: hidden;
+  margin-top: -2rem;
+}
+
+@media (min-width: 768px) {
+  .heroSection {
+    min-height: 90vh;
+  }
+}
+
+.heroBackground {
+  position: absolute;
+  inset: 0;
+  background-color: #000;
+}
+
+.heroImage {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  opacity: 0.4;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4), #000);
+}
+
+.heroLightRays {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom right, hsla(45, 100%, 55%, 0.1), transparent, transparent);
+  opacity: 0.5;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 85vh;
+  padding: 0 1rem;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .heroContent {
+    min-height: 90vh;
+  }
+}
+
+.heroBadge {
+  margin-bottom: 2rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  border: 2px solid hsla(45, 100%, 55%, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  padding: 0.75rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: hsl(45, 100%, 55%);
+}
+
+.heroBadgeIcon {
+  height: 1rem;
+  width: 1rem;
+  fill: currentColor;
+}
+
+.heroTitle {
+  margin-bottom: 2rem;
+  max-width: 80rem;
+  font-size: 4.5rem;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: -0.025em;
+}
+
+@media (min-width: 768px) {
+  .heroTitle {
+    font-size: 6rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .heroTitle {
+    font-size: 8rem;
+  }
+}
+
+.heroTitleLine1,
+.heroTitleLine3 {
+  display: block;
+  color: #fff;
+  text-shadow: var(--shadow-glow-strong);
+  filter: drop-shadow(0 25px 25px rgb(0 0 0 / 0.15));
+}
+
+.heroTitleLine2 {
+  margin-top: 1rem;
+  display: block;
+  background: var(--gradient-gold);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  text-shadow: var(--shadow-glow-strong);
+  filter: drop-shadow(0 25px 25px rgb(0 0 0 / 0.15));
+}
+
+.heroTitleLine3 {
+  margin-top: 1rem;
+}
+
+.heroSubtitle {
+  margin: 0 auto 3rem;
+  max-width: 48rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  color: rgba(255, 255, 255, 0.9);
+  filter: drop-shadow(0 10px 8px rgb(0 0 0 / 0.04)) drop-shadow(0 4px 3px rgb(0 0 0 / 0.1));
+}
+
+@media (min-width: 768px) {
+  .heroSubtitle {
+    font-size: 1.875rem;
+  }
+}
+
+.heroCta {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .heroCta {
+    flex-direction: row;
+    gap: 2rem;
+  }
+}
+
+.heroCtaButton {
+  position: relative;
+  overflow: hidden;
+  background: var(--gradient-gold);
+  font-size: 1.25rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2rem 3rem;
+  color: #000;
+  box-shadow: var(--shadow-glow);
+  transition: all 0.3s;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heroCtaButton:hover {
+  box-shadow: var(--shadow-glow-strong);
+  transform: scale(1.05);
+}
+
+.heroCtaButtonIcon {
+  margin-left: 0.75rem;
+  height: 1.5rem;
+  width: 1.5rem;
+  transition: transform 0.3s;
+}
+
+.heroCtaButton:hover .heroCtaButtonIcon {
+  transform: translateX(0.25rem);
+}
+
+.heroCtaSecondary {
+  border: 3px solid hsla(45, 100%, 55%, 0.8);
+  background-color: rgba(0, 0, 0, 0.5);
+  font-size: 1.25rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2rem 3rem;
+  color: #fff;
+  backdrop-filter: blur(4px);
+  transition: all 0.3s;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heroCtaSecondary:hover {
+  background-color: hsl(45, 100%, 55%);
+  color: #000;
+  box-shadow: var(--shadow-glow);
+}
+
+.heroBottomGradient {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 8rem;
+  background: linear-gradient(to top, hsl(0, 0%, 7%), transparent);
+}
+
+/* Separator Line */
+.separator {
+  position: relative;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 72rem;
+}
+
+.separatorLine {
+  height: 0.25rem;
+  background: var(--gradient-gold);
+  box-shadow: var(--shadow-glow);
+}
+
+/* Upcoming Events Section */
+.eventsSection {
+  padding: 0 1rem;
+}
+
+.eventsSectionHeader {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.eventsSectionBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-radius: 9999px;
+  border: 2px solid hsla(45, 100%, 55%, 0.3);
+  background-color: hsl(0, 0%, 10%);
+  padding: 0.75rem 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.eventsSectionBadgeIcon {
+  height: 1.25rem;
+  width: 1.25rem;
+  color: hsl(45, 100%, 55%);
+}
+
+.eventsSectionBadgeText {
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: hsl(45, 100%, 55%);
+}
+
+.eventsSectionTitle {
+  font-size: 3.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.025em;
+  color: #fff;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .eventsSectionTitle {
+    font-size: 4.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .eventsSectionTitle {
+    font-size: 6rem;
+  }
+}
+
+.eventsSectionTitleGold {
+  background: var(--gradient-gold);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.eventsSectionSubtitle {
+  font-size: 1.25rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  color: hsl(0, 0%, 70%);
+}
+
+@media (min-width: 768px) {
+  .eventsSectionSubtitle {
+    font-size: 1.5rem;
+  }
+}
+
+.eventsGrid {
+  margin: 0 auto;
+  display: grid;
+  max-width: 80rem;
+  gap: 2rem;
+}
+
+@media (min-width: 640px) {
+  .eventsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .eventsGrid {
+    gap: 2.5rem;
+  }
+}
+
+.eventCard {
+  transform: translateY(0);
+  transition: all 0.3s;
+}
+
+.eventCard:hover {
+  transform: scale(1.02);
+}
+
+.eventsButton {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.eventsButtonLink {
+  border: 2px solid hsla(45, 100%, 55%, 0.5);
+  background-color: hsla(0, 0%, 10%, 0.5);
+  font-size: 1.125rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1.5rem 2.5rem;
+  backdrop-filter: blur(4px);
+  transition: all 0.3s;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.eventsButtonLink:hover {
+  background-color: hsl(45, 100%, 55%);
+  color: #000;
+  box-shadow: var(--shadow-glow);
+}
+
+.eventsButtonIcon {
+  margin-left: 0.75rem;
+  height: 1.25rem;
+  width: 1.25rem;
+}
+
+/* Urgent Event Section */
+.urgentSection {
+  padding: 0 1rem;
+}
+
+.urgentCard {
+  position: relative;
+  margin: 0 auto;
+  max-width: 80rem;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 4px solid hsla(0, 80%, 55%, 0.5);
+  background: linear-gradient(to bottom right, hsl(0, 0%, 10%), hsl(0, 0%, 10%), #000);
+  padding: 2rem;
+  box-shadow: var(--shadow-card);
+}
+
+@media (min-width: 768px) {
+  .urgentCard {
+    padding: 3rem;
+  }
+}
+
+.urgentGlow1 {
+  position: absolute;
+  top: -5rem;
+  right: -5rem;
+  height: 10rem;
+  width: 10rem;
+  border-radius: 9999px;
+  background-color: hsla(0, 80%, 55%, 0.2);
+  filter: blur(80px);
+}
+
+.urgentGlow2 {
+  position: absolute;
+  bottom: -5rem;
+  left: -5rem;
+  height: 10rem;
+  width: 10rem;
+  border-radius: 9999px;
+  background-color: hsla(45, 100%, 55%, 0.2);
+  filter: blur(80px);
+}
+
+.urgentContent {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  align-items: center;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .urgentContent {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.urgentDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.urgentBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-radius: 9999px;
+  border: 2px solid hsl(0, 80%, 55%);
+  background-color: hsla(0, 80%, 55%, 0.2);
+  padding: 0.75rem 1.5rem;
+  backdrop-filter: blur(4px);
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  width: fit-content;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.urgentBadgeIcon {
+  height: 1.25rem;
+  width: 1.25rem;
+  color: hsl(0, 80%, 55%);
+}
+
+.urgentBadgeText {
+  font-size: 1rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: hsl(0, 80%, 55%);
+}
+
+.urgentInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.urgentTitle {
+  margin-bottom: 1rem;
+  font-size: 3rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.2;
+  color: #fff;
+}
+
+@media (min-width: 768px) {
+  .urgentTitle {
+    font-size: 3.75rem;
+  }
+}
+
+.urgentDescription {
+  margin-bottom: 1.5rem;
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: hsl(0, 0%, 70%);
+}
+
+.urgentMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.urgentDate {
+  color: hsl(45, 100%, 55%);
+}
+
+.urgentMetaDot {
+  color: hsl(0, 0%, 70%);
+}
+
+.urgentLocation {
+  color: hsl(0, 0%, 70%);
+}
+
+.urgentButton {
+  width: 100%;
+  background: var(--gradient-gold);
+  font-size: 1.25rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1.75rem;
+  color: #000;
+  box-shadow: var(--shadow-glow);
+  transition: all 0.3s;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 640px) {
+  .urgentButton {
+    width: auto;
+  }
+}
+
+.urgentButton:hover {
+  box-shadow: var(--shadow-glow-strong);
+  transform: scale(1.05);
+}
+
+.urgentButtonIcon {
+  margin-left: 0.75rem;
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+.urgentImageWrapper {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .urgentImageWrapper {
+    display: block;
+  }
+}
+
+.urgentImage {
+  border-radius: 0.75rem;
+  border: 2px solid hsla(45, 100%, 55%, 0.3);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+}
+
+/* Final CTA Section */
+.finalSection {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(to bottom right, #000, hsl(0, 0%, 10%), #000);
+  padding: 6rem 1rem;
+}
+
+.finalBackground {
+  position: absolute;
+  inset: 0;
+  opacity: 0.3;
+}
+
+.finalGlow1 {
+  position: absolute;
+  top: 0;
+  left: 25%;
+  height: 24rem;
+  width: 24rem;
+  border-radius: 9999px;
+  background-color: hsla(45, 100%, 55%, 0.2);
+  filter: blur(100px);
+}
+
+.finalGlow2 {
+  position: absolute;
+  bottom: 0;
+  right: 25%;
+  height: 24rem;
+  width: 24rem;
+  border-radius: 9999px;
+  background-color: hsla(0, 80%, 55%, 0.2);
+  filter: blur(100px);
+}
+
+.finalContent {
+  position: relative;
+  z-index: 10;
+  margin: 0 auto;
+  max-width: 80rem;
+  text-align: center;
+}
+
+.finalHeader {
+  margin-bottom: 3rem;
+}
+
+.finalTitle {
+  font-size: 3.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.2;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .finalTitle {
+    font-size: 4.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .finalTitle {
+    font-size: 6rem;
+  }
+}
+
+.finalTitleGold {
+  margin-top: 0.5rem;
+  display: block;
+  background: var(--gradient-gold);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  text-shadow: var(--shadow-glow);
+}
+
+.finalSubtitle {
+  margin: 0 auto;
+  max-width: 48rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  color: hsl(0, 0%, 70%);
+}
+
+@media (min-width: 768px) {
+  .finalSubtitle {
+    font-size: 1.5rem;
+  }
+}
+
+.finalButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  justify-content: center;
+  align-items: center;
+  padding-top: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .finalButtons {
+    flex-direction: row;
+    gap: 2rem;
+  }
+}
+
+.finalPrimaryButton {
+  background: var(--gradient-gold);
+  font-size: 1.25rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2rem 3rem;
+  color: #000;
+  box-shadow: var(--shadow-glow);
+  transition: all 0.3s;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.finalPrimaryButton:hover {
+  box-shadow: var(--shadow-glow-strong);
+  transform: scale(1.05);
+}
+
+.finalSecondaryButton {
+  border: 3px solid hsla(45, 100%, 55%, 0.6);
+  background-color: hsla(0, 0%, 10%, 0.5);
+  font-size: 1.25rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2rem 3rem;
+  backdrop-filter: blur(4px);
+  transition: all 0.3s;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.finalSecondaryButton:hover {
+  background-color: hsl(45, 100%, 55%);
+  color: #000;
+  box-shadow: var(--shadow-glow);
+}
+
+.buttonIcon {
+  margin-left: 0.75rem;
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+/* Fade in sections for GSAP */
+.fadeInSection {
+  opacity: 0;
+}

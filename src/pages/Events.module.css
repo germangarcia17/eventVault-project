@@ -1,0 +1,245 @@
+/* Events Page Styles */
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+/* Hero Section */
+.heroSection {
+  position: relative;
+  margin-left: -1rem;
+  margin-right: -1rem;
+  margin-top: -2rem;
+  margin-bottom: 3rem;
+  overflow: hidden;
+  border-bottom-left-radius: 1.5rem;
+  border-bottom-right-radius: 1.5rem;
+}
+
+.heroBackground {
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-hero);
+  opacity: 0.9;
+}
+
+.heroImage {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  mix-blend-mode: overlay;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 10;
+  padding: 6rem 1rem;
+  text-align: center;
+  color: #fff;
+}
+
+.heroTitle {
+  margin-bottom: 1rem;
+  font-size: 3rem;
+  font-weight: 700;
+  font-family: 'Bebas Neue', 'Anton', 'Oswald', sans-serif;
+}
+
+@media (min-width: 768px) {
+  .heroTitle {
+    font-size: 3.75rem;
+  }
+}
+
+.heroDescription {
+  margin: 0 auto 2rem;
+  max-width: 42rem;
+  font-size: 1.125rem;
+  opacity: 0.95;
+}
+
+@media (min-width: 768px) {
+  .heroDescription {
+    font-size: 1.25rem;
+  }
+}
+
+.heroButton {
+  background: var(--gradient-gold);
+  font-size: 1.125rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1rem 2rem;
+  color: #000;
+  box-shadow: var(--shadow-glow);
+  transition: all 0.3s;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heroButton:hover {
+  box-shadow: var(--shadow-glow-strong);
+  transform: scale(1.05);
+}
+
+/* Search and Filters Section */
+.filtersSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.filtersRow {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .filtersRow {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.searchWrapper {
+  position: relative;
+  flex: 1;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 1.25rem;
+  width: 1.25rem;
+  color: hsl(0, 0%, 70%);
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  background-color: hsl(0, 0%, 15%);
+  border: 2px solid hsla(45, 100%, 55%, 0.2);
+  border-radius: 0.5rem;
+  color: #fff;
+  font-size: 1rem;
+  transition: all 0.3s;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: hsl(45, 100%, 55%);
+  box-shadow: 0 0 0 3px hsla(45, 100%, 55%, 0.1);
+}
+
+.searchInput::placeholder {
+  color: hsl(0, 0%, 70%);
+}
+
+.filterGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filterIcon {
+  height: 1.25rem;
+  width: 1.25rem;
+  color: hsl(0, 0%, 70%);
+}
+
+.selectWrapper {
+  position: relative;
+  width: 180px;
+}
+
+.select {
+  width: 100%;
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  background-color: hsl(0, 0%, 15%);
+  border: 2px solid hsla(45, 100%, 55%, 0.2);
+  border-radius: 0.5rem;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.3s;
+  appearance: none;
+}
+
+.select:hover {
+  border-color: hsl(45, 100%, 55%);
+}
+
+.select:focus {
+  outline: none;
+  border-color: hsl(45, 100%, 55%);
+  box-shadow: 0 0 0 3px hsla(45, 100%, 55%, 0.1);
+}
+
+.selectArrow {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: hsl(45, 100%, 55%);
+}
+
+.resultsCount {
+  font-size: 0.875rem;
+  color: hsl(0, 0%, 70%);
+}
+
+/* Events Grid */
+.eventsGrid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .eventsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .eventsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .eventsGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.eventCardWrapper {
+  opacity: 0;
+}
+
+/* Empty State */
+.emptyState {
+  padding: 5rem 0;
+  text-align: center;
+}
+
+.emptyStateText {
+  font-size: 1.125rem;
+  color: hsl(0, 0%, 70%);
+}

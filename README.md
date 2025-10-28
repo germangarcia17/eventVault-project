@@ -55,10 +55,12 @@ npm run dev
 This project is built with:
 
 - Vite
-- TypeScript
+- JavaScript (ES6+)
 - React
-- shadcn-ui
-- Tailwind CSS
+- CSS Modules
+- GSAP
+- Supabase
+- Stripe
 
 ## How can I deploy this project?
 
