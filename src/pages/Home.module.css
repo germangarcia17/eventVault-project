@@ -175,6 +175,10 @@
   }
 }
 
+.heroCtaCentered {
+  justify-content: center;
+}
+
 .heroCtaButton {
   position: relative;
   overflow: hidden;

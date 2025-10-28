@@ -7,6 +7,9 @@ export const Layout = ({ children }) => {
   const location = useLocation();
   const { user, signOut } = useAuth();
 
+  // Check if user is admin using their email
+  const isAdmin = user?.email === import.meta.env.VITE_SUPABASE_ADMIN_EMAIL;
+
   const isActive = (path) => location.pathname === path;
 
   return (
@@ -43,6 +46,14 @@ export const Layout = ({ children }) => {
                 >
                   Mis Reservas
                 </Link>
+                {isAdmin && (
+                  <Link
+                    to="/admin"
+                    className={`${styles.navLink} ${isActive('/admin') ? styles.navLinkActive : ''}`}
+                  >
+                    Admin
+                  </Link>
+                )}
                 <button 
                   className={styles.logoutButton}
                   onClick={signOut}

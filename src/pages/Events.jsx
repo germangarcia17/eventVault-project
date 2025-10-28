@@ -1,31 +1,49 @@
 import { useState, useEffect } from 'react';
 import { Search, Filter, ChevronDown } from 'lucide-react';
 import { EventCard } from '@/components/EventCard';
-import { mockEvents } from '@/lib/mockData';
+import { supabase } from '@/lib/supabase';
 import { gsap } from 'gsap';
 import heroImage from '@/assets/hero-events.jpg';
 import styles from './Events.module.css';
 
 const Events = () => {
-  const [events, setEvents] = useState(mockEvents);
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
 
   useEffect(() => {
-    // Animate hero section on mount
-    gsap.fromTo(
-      '.hero-content',
-      { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }
-    );
-
-    // Animate event cards
-    gsap.fromTo(
-      '.event-card',
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, delay: 0.3, ease: 'power2.out' }
-    );
+    fetchEvents();
   }, []);
+
+  const fetchEvents = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('events')
+        .select('*')
+        .order('date', { ascending: true });
+
+      if (error) throw error;
+
+      setEvents(data || []);
+    } catch (error) {
+      console.error('Error fetching events:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!loading && events.length > 0) {
+      // Animate hero section on mount
+      gsap.fromTo(
+        '.hero-content',
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }
+      );
+    }
+  }, [loading, events]);
 
   const filteredEvents = events.filter((event) => {
     const matchesSearch = event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -33,6 +51,17 @@ const Events = () => {
     const matchesCategory = categoryFilter === 'all' || event.category === categoryFilter;
     return matchesSearch && matchesCategory;
   });
+
+  useEffect(() => {
+    if (!loading && filteredEvents.length > 0) {
+      // Animate event cards whenever filtered events change
+      gsap.fromTo(
+        '.event-card',
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: 'power2.out' }
+      );
+    }
+  }, [filteredEvents.length, loading]);
 
   return (
     <div className={styles.container}>
@@ -98,14 +127,20 @@ const Events = () => {
 
       {/* Events Grid */}
       <section className={styles.eventsGrid}>
-        {filteredEvents.map((event) => (
-          <div key={event.id} className={`${styles.eventCardWrapper} event-card`}>
-            <EventCard event={event} />
+        {loading ? (
+          <div className={styles.loadingState}>
+            <p>Cargando eventos...</p>
           </div>
-        ))}
+        ) : (
+          filteredEvents.map((event) => (
+            <div key={event.id} className={`${styles.eventCardWrapper} event-card`}>
+              <EventCard event={event} />
+            </div>
+          ))
+        )}
       </section>
 
-      {filteredEvents.length === 0 && (
+      {!loading && filteredEvents.length === 0 && (
         <div className={styles.emptyState}>
           <p className={styles.emptyStateText}>
             No se encontraron eventos con esos criterios

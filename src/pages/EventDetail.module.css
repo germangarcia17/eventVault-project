@@ -88,6 +88,25 @@
   flex-direction: column;
 }
 
+.badgeGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.badgeDate {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background: hsl(var(--muted));
+  color: hsl(var(--muted-foreground));
+}
+
 .badge {
   display: inline-block;
   padding: 0.25rem 0.75rem;
@@ -95,7 +114,6 @@
   font-size: 0.875rem;
   font-weight: 600;
   text-transform: uppercase;
-  margin-bottom: 0.75rem;
   border: 1px solid;
   width: fit-content;
 }
@@ -155,18 +173,31 @@
 .infoCard {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.25rem;
   border-radius: 0.75rem;
   border: 1px solid hsl(var(--border));
   background: hsla(var(--muted), 0.3);
   padding: 1.5rem;
 }
 
-.infoItem {
+.infoCardTitle {
   display: flex;
   align-items: center;
+  gap: 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: hsl(var(--foreground));
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.infoItem {
+  display: flex;
+  align-items: flex-start;
   gap: 0.75rem;
   color: hsl(var(--foreground));
+  padding: 0.5rem 0;
 }
 
 .infoIcon {
@@ -174,26 +205,35 @@
   height: 1.25rem;
   color: hsl(var(--primary));
   flex-shrink: 0;
+  margin-top: 0.125rem;
 }
 
 .infoContent {
   display: flex;
   flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
 }
 
 .infoLabel {
   font-size: 0.875rem;
   color: hsl(var(--muted-foreground));
-  margin-bottom: 0.125rem;
+  font-weight: 500;
 }
 
 .infoValue {
   font-weight: 600;
   color: hsl(var(--foreground));
+  font-size: 1rem;
+}
+
+.infoSubValue {
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
 }
 
 .price {
-  font-size: 1.875rem;
+  font-size: 2rem;
   font-weight: 700;
   color: hsl(var(--primary));
 }
@@ -229,6 +269,32 @@
 .reserveButton:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.reserveButtonDisabled {
+  background: hsl(var(--muted));
+  color: hsl(var(--muted-foreground));
+  box-shadow: none;
+}
+
+.viewReservationButton {
+  width: 100%;
+  padding: 0.875rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: hsl(var(--primary));
+  background: transparent;
+  border: 2px solid hsl(var(--primary));
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.viewReservationButton:hover {
+  background: hsl(var(--primary));
+  color: hsl(var(--background));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px hsla(var(--primary), 0.3);
 }
 
 .secureNote {

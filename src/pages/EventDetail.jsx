@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Calendar, MapPin, Tag, ArrowLeft, Users } from 'lucide-react';
-import { mockEvents } from '@/lib/mockData';
+import { Calendar, MapPin, Tag, ArrowLeft, Users, Clock, Ticket } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { gsap } from 'gsap';
@@ -15,6 +15,8 @@ const EventDetail = () => {
   const { user } = useAuth();
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loadingEvent, setLoadingEvent] = useState(true);
+  const [hasReservation, setHasReservation] = useState(false);
 
   const getCategoryClass = (category) => {
     const classes = {
@@ -29,17 +31,67 @@ const EventDetail = () => {
   };
 
   useEffect(() => {
-    const foundEvent = mockEvents.find((e) => e.id === id);
-    setEvent(foundEvent || null);
-
-    if (foundEvent) {
-      gsap.fromTo(
-        '.event-detail',
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }
-      );
+    fetchEvent();
+    if (user) {
+      checkExistingReservation();
     }
-  }, [id]);
+  }, [id, user]);
+
+  const fetchEvent = async () => {
+    try {
+      setLoadingEvent(true);
+      const { data, error } = await supabase
+        .from('events')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (error) throw error;
+
+      setEvent(data);
+
+      // Animate after DOM is ready
+      if (data) {
+        setTimeout(() => {
+          const element = document.querySelector('.event-detail');
+          if (element) {
+            gsap.fromTo(
+              element,
+              { opacity: 0, y: 20 },
+              { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }
+            );
+          }
+        }, 50);
+      }
+    } catch (error) {
+      console.error('Error fetching event:', error);
+      setEvent(null);
+    } finally {
+      setLoadingEvent(false);
+    }
+  };
+
+  const checkExistingReservation = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('reservations')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('event_id', id)
+        .maybeSingle(); // Use maybeSingle() instead of single()
+
+      if (error) {
+        console.error('Error checking reservation:', error);
+        setHasReservation(false);
+        return;
+      }
+
+      setHasReservation(!!data);
+    } catch (error) {
+      console.error('Error checking reservation:', error);
+      setHasReservation(false);
+    }
+  };
 
   const handleReserve = async () => {
     if (!user) {
@@ -52,23 +104,80 @@ const EventDetail = () => {
       return;
     }
 
-    setLoading(true);
-    // Simulate booking process
-    setTimeout(() => {
-      setLoading(false);
+    if (hasReservation) {
       toast({
-        title: '¡Reserva exitosa!',
-        description: 'Redirigiendo al pago...',
+        title: 'Ya tienes una reserva',
+        description: 'Ya has reservado este evento',
+        variant: 'destructive',
       });
-      // In real app, this would redirect to Stripe Checkout
-      navigate('/success');
-    }, 1500);
+      navigate('/dashboard');
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      // Create FREE reservation in Supabase (without QR and payment)
+      const { data, error } = await supabase
+        .from('reservations')
+        .insert({
+          user_id: user.id,
+          event_id: id,
+          payment_status: 'pending',
+          qr_code: '' // Empty string instead of null (QR will be generated after payment)
+        })
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
+
+      toast({
+        title: '¡Reserva confirmada!',
+        description: 'Ahora puedes proceder con el pago',
+      });
+
+      // Update local state
+      setHasReservation(true);
+
+      // Redirect to dashboard after a short delay
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 1500);
+
+    } catch (error) {
+      console.error('Error creating reservation:', error);
+      toast({
+        title: 'Error',
+        description: 'No se pudo completar la reserva. Intenta de nuevo.',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
   };
+
+  if (loadingEvent) {
+    return (
+      <div className={styles.loading}>
+        <p className={styles.loadingText}>Cargando evento...</p>
+      </div>
+    );
+  }
 
   if (!event) {
     return (
       <div className={styles.notFound}>
         <p className={styles.notFoundText}>Evento no encontrado</p>
+        <button 
+          onClick={() => navigate('/events')} 
+          className={styles.backButton}
+        >
+          <ArrowLeft />
+          Ver todos los eventos
+        </button>
       </div>
     );
   }
@@ -97,9 +206,15 @@ const EventDetail = () => {
           {/* Details */}
           <div className={styles.details}>
             <div className={styles.header}>
-              <span className={`${styles.badge} ${getCategoryClass(event.category)}`}>
-                {event.category}
-              </span>
+              <div className={styles.badgeGroup}>
+                <span className={`${styles.badge} ${getCategoryClass(event.category)}`}>
+                  {event.category}
+                </span>
+                <span className={styles.badgeDate}>
+                  <Clock size={14} />
+                  {format(new Date(event.date), "d MMM yyyy", { locale: es })}
+                </span>
+              </div>
               <h1 className={styles.title}>
                 {event.title}
               </h1>
@@ -109,12 +224,20 @@ const EventDetail = () => {
             </div>
 
             <div className={styles.infoCard}>
+              <h3 className={styles.infoCardTitle}>
+                <Ticket size={20} />
+                Detalles del Evento
+              </h3>
+              
               <div className={styles.infoItem}>
                 <Calendar className={styles.infoIcon} />
                 <div className={styles.infoContent}>
                   <p className={styles.infoLabel}>Fecha y hora</p>
                   <p className={styles.infoValue}>
-                    {format(new Date(event.date), "d 'de' MMMM, yyyy - HH:mm", { locale: es })}
+                    {format(new Date(event.date), "EEEE, d 'de' MMMM, yyyy", { locale: es })}
+                  </p>
+                  <p className={styles.infoSubValue}>
+                    {format(new Date(event.date), "HH:mm", { locale: es })} hrs
                   </p>
                 </div>
               </div>
@@ -130,24 +253,43 @@ const EventDetail = () => {
               <div className={styles.infoItem}>
                 <Tag className={styles.infoIcon} />
                 <div className={styles.infoContent}>
-                  <p className={styles.infoLabel}>Precio</p>
-                  <p className={styles.price}>${event.price}</p>
+                  <p className={styles.infoLabel}>Precio por entrada</p>
+                  <p className={styles.price}>${event.price} USD</p>
                 </div>
               </div>
             </div>
 
             <div className={styles.actions}>
-              <button
-                className={styles.reserveButton}
-                onClick={handleReserve}
-                disabled={loading}
-              >
-                {loading ? 'Procesando...' : 'Reservar Entrada'}
-              </button>
-              <p className={styles.secureNote}>
-                <Users />
-                Pago seguro con Stripe
-              </p>
+              {hasReservation ? (
+                <>
+                  <button
+                    className={`${styles.reserveButton} ${styles.reserveButtonDisabled}`}
+                    disabled
+                  >
+                    Ya tienes una reserva
+                  </button>
+                  <button
+                    className={styles.viewReservationButton}
+                    onClick={() => navigate('/dashboard')}
+                  >
+                    Ver mis reservas
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    className={styles.reserveButton}
+                    onClick={handleReserve}
+                    disabled={loading}
+                  >
+                    {loading ? 'Procesando...' : 'Reservar Entrada'}
+                  </button>
+                  <p className={styles.secureNote}>
+                    <Users />
+                    Pago seguro con Stripe
+                  </p>
+                </>
+              )}
             </div>
           </div>
         </div>

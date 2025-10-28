@@ -5,12 +5,16 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { Layout } from "@/components/Layout";
+import { ProtectedAdminRoute } from "@/components/ProtectedAdminRoute";
 import Home from "./pages/Home";
 import Events from "./pages/Events";
 import EventDetail from "./pages/EventDetail";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
+import Payment from "./pages/Payment";
 import Admin from "./pages/Admin";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminEvents from "./pages/AdminEvents";
 import Success from "./pages/Success";
 import Cancel from "./pages/Cancel";
 import NotFound from "./pages/NotFound";
@@ -31,7 +35,18 @@ const App = () => (
               <Route path="/event/:id" element={<EventDetail />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/admin" element={<Admin />} />
+              <Route path="/payment" element={<Payment />} />
+              <Route 
+                path="/admin" 
+                element={
+                  <ProtectedAdminRoute>
+                    <Admin />
+                  </ProtectedAdminRoute>
+                }
+              >
+                <Route index element={<AdminDashboard />} />
+                <Route path="events" element={<AdminEvents />} />
+              </Route>
               <Route path="/success" element={<Success />} />
               <Route path="/cancel" element={<Cancel />} />
               <Route path="*" element={<NotFound />} />

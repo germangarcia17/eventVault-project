@@ -1,43 +1,72 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, ArrowRight, Sparkles, Zap } from 'lucide-react';
 import { EventCard } from '@/components/EventCard';
-import { mockEvents } from '@/lib/mockData';
+import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/hooks/useAuth';
 import { gsap } from 'gsap';
 import heroImage from '@/assets/hero-events.jpg';
 import styles from './Home.module.css';
 
 const Home = () => {
+  const { user } = useAuth();
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    // Dramatic entrance animations
-    gsap.fromTo(
-      '.hero-title',
-      { opacity: 0, scale: 0.8, y: 50 },
-      { opacity: 1, scale: 1, y: 0, duration: 1, ease: 'power4.out' }
-    );
-
-    gsap.fromTo(
-      '.hero-subtitle',
-      { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, duration: 0.8, delay: 0.3, ease: 'power3.out' }
-    );
-
-    gsap.fromTo(
-      '.hero-cta',
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.6, delay: 0.6, ease: 'power2.out' }
-    );
-
-    // Animate sections with stagger
-    gsap.fromTo(
-      '.fade-in-section',
-      { opacity: 0, y: 40 },
-      { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, delay: 0.8, ease: 'power2.out' }
-    );
+    fetchEvents();
   }, []);
 
+  const fetchEvents = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('events')
+        .select('*')
+        .order('date', { ascending: true });
+
+      if (error) throw error;
+
+      setEvents(data || []);
+    } catch (error) {
+      console.error('Error fetching events:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!loading) {
+      // Dramatic entrance animations
+      gsap.fromTo(
+        '.hero-title',
+        { opacity: 0, scale: 0.8, y: 50 },
+        { opacity: 1, scale: 1, y: 0, duration: 1, ease: 'power4.out' }
+      );
+
+      gsap.fromTo(
+        '.hero-subtitle',
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.8, delay: 0.3, ease: 'power3.out' }
+      );
+
+      gsap.fromTo(
+        '.hero-cta',
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.6, delay: 0.6, ease: 'power2.out' }
+      );
+
+      // Animate sections with stagger
+      gsap.fromTo(
+        '.fade-in-section',
+        { opacity: 0, y: 40 },
+        { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, delay: 0.8, ease: 'power2.out' }
+      );
+    }
+  }, [loading]);
+
   // Get the 4 upcoming events sorted by date
-  const upcomingEvents = [...mockEvents]
+  const upcomingEvents = [...events]
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
     .slice(0, 4);
 
@@ -88,14 +117,16 @@ const Home = () => {
             </p>
 
             {/* CTA Buttons */}
-            <div className={`${styles.heroCta} hero-cta`}>
+            <div className={`${styles.heroCta} ${user ? styles.heroCtaCentered : ''} hero-cta`}>
               <Link to="/events" className={styles.heroCtaButton}>
                 Ver Eventos
                 <ArrowRight className={styles.heroCtaButtonIcon} />
               </Link>
-              <Link to="/auth" className={styles.heroCtaSecondary}>
-                Iniciar Sesión
-              </Link>
+              {!user && (
+                <Link to="/auth" className={styles.heroCtaSecondary}>
+                  Iniciar Sesión
+                </Link>
+              )}
             </div>
           </div>
 
