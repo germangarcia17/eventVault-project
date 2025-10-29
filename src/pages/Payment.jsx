@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { CreditCard, Lock, ArrowLeft } from 'lucide-react';
+import { CreditCard, Lock, ArrowLeft, AlertCircle } from 'lucide-react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { supabase } from '../lib/supabase';
@@ -10,20 +10,67 @@ import styles from './Payment.module.css';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
+// API endpoint based on environment
+const API_URL = import.meta.env.DEV 
+  ? 'http://localhost:8888/.netlify/functions' 
+  : '/.netlify/functions';
+
 function CheckoutForm({ reservation, event, onSuccess }) {
   const stripe = useStripe();
   const elements = useElements();
   const { toast } = useToast();
   const [processing, setProcessing] = useState(false);
+  const [error, setError] = useState(null);
+  const [clientSecret, setClientSecret] = useState(null);
+
+  // Create PaymentIntent on mount
+  useEffect(() => {
+    const createPaymentIntent = async () => {
+      try {
+        const response = await fetch(`${API_URL}/create-payment-intent`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            amount: event.price,
+            currency: 'usd',
+            eventId: event.id,
+            eventName: event.title,
+            userId: reservation.user_id,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || data.error || 'Error creating payment intent');
+        }
+
+        setClientSecret(data.clientSecret);
+      } catch (err) {
+        console.error('Error creating payment intent:', err);
+        setError(err.message);
+        toast({
+          title: 'Error',
+          description: 'No se pudo inicializar el pago. Por favor, intenta de nuevo.',
+          variant: 'destructive',
+        });
+      }
+    };
+
+    createPaymentIntent();
+  }, [event.id, event.price, event.title, reservation.user_id, toast]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!stripe || !elements) {
+    if (!stripe || !elements || !clientSecret) {
       return;
     }
 
     setProcessing(true);
+    setError(null);
     
     // Track payment initiated
     analytics.trackPaymentInitiated(event.id, event.title, Number(event.price) || 0);
@@ -31,46 +78,75 @@ function CheckoutForm({ reservation, event, onSuccess }) {
     try {
       const cardElement = elements.getElement(CardElement);
 
-      // Create payment method
-      const { error, paymentMethod } = await stripe.createPaymentMethod({
-        type: 'card',
-        card: cardElement,
+      // Confirm the payment with Stripe
+      const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: cardElement,
+        },
       });
 
-      if (error) {
-        throw new Error(error.message);
+      if (stripeError) {
+        // Handle different types of Stripe errors
+        let errorMessage = 'No se pudo procesar el pago.';
+        
+        switch (stripeError.code) {
+          case 'card_declined':
+            errorMessage = 'Tu tarjeta fue rechazada. Por favor, intenta con otra tarjeta.';
+            break;
+          case 'insufficient_funds':
+            errorMessage = 'Fondos insuficientes en la tarjeta.';
+            break;
+          case 'expired_card':
+            errorMessage = 'Tu tarjeta ha expirado.';
+            break;
+          case 'incorrect_cvc':
+            errorMessage = 'El código CVC es incorrecto.';
+            break;
+          case 'processing_error':
+            errorMessage = 'Error al procesar el pago. Por favor, intenta de nuevo.';
+            break;
+          case 'incorrect_number':
+            errorMessage = 'El número de tarjeta es incorrecto.';
+            break;
+          default:
+            errorMessage = stripeError.message || errorMessage;
+        }
+
+        throw new Error(errorMessage);
       }
 
-      // In a real app, you'd send paymentMethod.id to your backend
-      // For now, we'll simulate a successful payment
-      await simulatePayment(paymentMethod.id);
+      // Payment successful
+      if (paymentIntent.status === 'succeeded') {
+        // Generate QR code data
+        const qrData = `EVT-${event.id}-${reservation.user_id}-${Date.now()}`;
 
-      // Generate QR code data
-      const qrData = `EVT-${event.id}-${reservation.user_id}-${Date.now()}`;
+        // Update reservation in database
+        const { error: updateError } = await supabase
+          .from('reservations')
+          .update({
+            payment_status: 'paid',
+            qr_code: qrData,
+          })
+          .eq('id', reservation.id);
 
-      // Update reservation in database
-      const { error: updateError } = await supabase
-        .from('reservations')
-        .update({
-          payment_status: 'paid',
-          qr_code: qrData,
-        })
-        .eq('id', reservation.id);
+        if (updateError) throw updateError;
 
-      if (updateError) throw updateError;
+        // Track successful payment
+        analytics.trackPaymentSuccess(event.id, event.title, Number(event.price) || 0);
+        analytics.trackBookingCompleted(event.id, event.title, Number(event.price) || 0);
 
-      // Track successful payment
-      analytics.trackPaymentSuccess(event.id, event.title, Number(event.price) || 0);
-      analytics.trackBookingCompleted(event.id, event.title, Number(event.price) || 0);
+        toast({
+          title: '¡Pago exitoso!',
+          description: 'Tu entrada ha sido confirmada. Recibirás un correo con tu código QR.',
+        });
 
-      toast({
-        title: '¡Pago exitoso!',
-        description: 'Tu entrada ha sido confirmada. Recibirás un correo con tu código QR.',
-      });
-
-      onSuccess();
+        onSuccess();
+      } else {
+        throw new Error('El pago no se completó correctamente.');
+      }
     } catch (error) {
       console.error('Payment error:', error);
+      setError(error.message);
       
       // Track failed payment
       analytics.trackPaymentFailed(event.id, event.title, error.message);
@@ -85,18 +161,36 @@ function CheckoutForm({ reservation, event, onSuccess }) {
     }
   };
 
-  // Simulate payment processing (remove in production)
-  const simulatePayment = (paymentMethodId) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        console.log('Payment processed:', paymentMethodId);
-        resolve();
-      }, 2000);
-    });
-  };
+  // Show loading state while creating payment intent
+  if (!clientSecret && !error) {
+    return (
+      <div className={styles.loadingPayment}>
+        <div className={styles.spinner} />
+        <p>Preparando pasarela de pago...</p>
+      </div>
+    );
+  }
+
+  // Show error if payment intent creation failed
+  if (error && !clientSecret) {
+    return (
+      <div className={styles.errorPayment}>
+        <AlertCircle className={styles.errorIcon} />
+        <p>Error al inicializar el pago</p>
+        <p className={styles.errorMessage}>{error}</p>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
+      {error && (
+        <div className={styles.errorBanner}>
+          <AlertCircle className={styles.errorBannerIcon} />
+          <p>{error}</p>
+        </div>
+      )}
+      
       <div className={styles.cardElementWrapper}>
         <CardElement
           options={{
@@ -127,7 +221,7 @@ function CheckoutForm({ reservation, event, onSuccess }) {
 
       <button
         type="submit"
-        disabled={!stripe || processing}
+        disabled={!stripe || processing || !clientSecret}
         className={styles.submitButton}
       >
         {processing ? (
