@@ -5,8 +5,11 @@ import { EventCard } from '@/components/EventCard';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/hooks/useAuth';
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import heroImage from '@/assets/hero-events.jpg';
 import styles from './Home.module.css';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Home = () => {
   const { user } = useAuth();
@@ -37,32 +40,231 @@ const Home = () => {
 
   useEffect(() => {
     if (!loading) {
-      // Dramatic entrance animations
+      // HERO SECTION ANIMATIONS - Load immediately
       gsap.fromTo(
-        '.hero-title',
-        { opacity: 0, scale: 0.8, y: 50 },
-        { opacity: 1, scale: 1, y: 0, duration: 1, ease: 'power4.out' }
+        '.hero-background',
+        { scale: 1.2, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 1.5, ease: 'power3.out' }
       );
 
       gsap.fromTo(
-        '.hero-subtitle',
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 0.8, delay: 0.3, ease: 'power3.out' }
+        '.hero-image',
+        { scale: 1.3, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 1.8, ease: 'power2.out' }
+      );
+
+      // Hero badge animation
+      gsap.fromTo(
+        '.hero-badge',
+        { opacity: 0, scale: 0.5, y: -20 },
+        { opacity: 1, scale: 1, y: 0, duration: 0.8, delay: 0.3, ease: 'back.out(1.7)' }
+      );
+
+      // Dramatic title animations - each line separately
+      gsap.fromTo(
+        '.hero-title-line-1',
+        { opacity: 0, x: -100, rotationX: -90 },
+        { opacity: 1, x: 0, rotationX: 0, duration: 1, delay: 0.5, ease: 'power4.out' }
       );
 
       gsap.fromTo(
-        '.hero-cta',
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.6, delay: 0.6, ease: 'power2.out' }
+        '.hero-title-line-2',
+        { opacity: 0, x: 100, rotationX: -90 },
+        { opacity: 1, x: 0, rotationX: 0, duration: 1, delay: 0.7, ease: 'power4.out' }
       );
 
-      // Animate sections with stagger
+      gsap.fromTo(
+        '.hero-title-line-3',
+        { opacity: 0, x: -100, rotationX: -90 },
+        { opacity: 1, x: 0, rotationX: 0, duration: 1, delay: 0.9, ease: 'power4.out' }
+      );
+
+      // Hero subtitle animation
+      gsap.fromTo(
+        '.hero-subtitle-text',
+        { opacity: 0, y: 30, scale: 0.9 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.8, delay: 1.2, ease: 'power3.out' }
+      );
+
+      // Hero CTA buttons
+      gsap.fromTo(
+        '.hero-cta-button',
+        { opacity: 0, y: 30, scale: 0.8 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.8, delay: 1.4, ease: 'back.out(1.5)' }
+      );
+
+      // Light rays effect
+      gsap.fromTo(
+        '.hero-light-rays',
+        { opacity: 0, scale: 0.8 },
+        { opacity: 1, scale: 1, duration: 2, delay: 0.5, ease: 'power2.out' }
+      );
+
+      // EVENTS SECTION - Trigger on scroll
       gsap.fromTo(
         '.fade-in-section',
-        { opacity: 0, y: 40 },
-        { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, delay: 0.8, ease: 'power2.out' }
+        { opacity: 0, y: 60 },
+        { 
+          opacity: 1, 
+          y: 0, 
+          duration: 1, 
+          stagger: 0.2, 
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '.fade-in-section',
+            start: 'top 80%',
+            toggleActions: 'play none none none'
+          }
+        }
       );
+
+      // URGENT SECTION - Trigger on scroll
+      const urgentCard = document.querySelector('.urgent-card');
+      if (urgentCard) {
+        gsap.fromTo(
+          '.urgent-card',
+          { opacity: 0, scale: 0.9, y: 50 },
+          { 
+            opacity: 1, 
+            scale: 1, 
+            y: 0, 
+            duration: 1.2, 
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: '.urgent-card',
+              start: 'top 80%',
+              toggleActions: 'play none none none'
+            }
+          }
+        );
+
+        gsap.fromTo(
+          '.urgent-badge',
+          { opacity: 0, x: -30, rotate: -5 },
+          { 
+            opacity: 1, 
+            x: 0, 
+            rotate: 0, 
+            duration: 0.8, 
+            ease: 'back.out(1.7)',
+            scrollTrigger: {
+              trigger: '.urgent-card',
+              start: 'top 80%',
+              toggleActions: 'play none none none'
+            }
+          }
+        );
+
+        gsap.fromTo(
+          '.urgent-title',
+          { opacity: 0, y: 20 },
+          { 
+            opacity: 1, 
+            y: 0, 
+            duration: 0.8, 
+            delay: 0.2, 
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: '.urgent-card',
+              start: 'top 80%',
+              toggleActions: 'play none none none'
+            }
+          }
+        );
+
+        gsap.fromTo(
+          '.urgent-description',
+          { opacity: 0, y: 20 },
+          { 
+            opacity: 1, 
+            y: 0, 
+            duration: 0.8, 
+            delay: 0.4, 
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: '.urgent-card',
+              start: 'top 80%',
+              toggleActions: 'play none none none'
+            }
+          }
+        );
+
+        gsap.fromTo(
+          '.urgent-meta',
+          { opacity: 0, y: 20 },
+          { 
+            opacity: 1, 
+            y: 0, 
+            duration: 0.8, 
+            delay: 0.6, 
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: '.urgent-card',
+              start: 'top 80%',
+              toggleActions: 'play none none none'
+            }
+          }
+        );
+
+        gsap.fromTo(
+          '.urgent-button',
+          { opacity: 0, scale: 0.8, y: 20 },
+          { 
+            opacity: 1, 
+            scale: 1, 
+            y: 0, 
+            duration: 0.8, 
+            delay: 0.8, 
+            ease: 'back.out(1.5)',
+            scrollTrigger: {
+              trigger: '.urgent-card',
+              start: 'top 80%',
+              toggleActions: 'play none none none'
+            }
+          }
+        );
+
+        gsap.fromTo(
+          '.urgent-image',
+          { opacity: 0, scale: 1.2, x: 50 },
+          { 
+            opacity: 1, 
+            scale: 1, 
+            x: 0, 
+            duration: 1.2, 
+            delay: 0.3, 
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: '.urgent-card',
+              start: 'top 80%',
+              toggleActions: 'play none none none'
+            }
+          }
+        );
+
+        // Glows animations
+        gsap.fromTo(
+          '.urgent-glow',
+          { opacity: 0, scale: 0.5 },
+          { 
+            opacity: 1, 
+            scale: 1, 
+            duration: 2, 
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: '.urgent-card',
+              start: 'top 80%',
+              toggleActions: 'play none none none'
+            }
+          }
+        );
+      }
     }
+
+    // Cleanup function
+    return () => {
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    };
   }, [loading]);
 
   // Get the 4 upcoming events sorted by date
@@ -79,51 +281,51 @@ const Home = () => {
         {/* Hero Section - Ultra dramatic inspired by thescotch.org */}
         <section className={styles.heroSection}>
           {/* Background with overlay */}
-          <div className={styles.heroBackground} />
+          <div className={`${styles.heroBackground} hero-background`} />
           <img
             src={heroImage}
             alt="Events hero"
-            className={styles.heroImage}
+            className={`${styles.heroImage} hero-image`}
           />
           <div className={styles.heroOverlay} />
           
           {/* Animated light rays effect */}
-          <div className={styles.heroLightRays} />
+          <div className={`${styles.heroLightRays} hero-light-rays`} />
           
           <div className={styles.heroContent}>
             {/* Small badge */}
-            <div className={`${styles.heroBadge} hero-subtitle`}>
+            <div className={`${styles.heroBadge} hero-badge`}>
               <Zap className={styles.heroBadgeIcon} fill="currentColor" />
               <span>Experiencias Épicas</span>
               <Zap className={styles.heroBadgeIcon} fill="currentColor" />
             </div>
 
             {/* Main dramatic title */}
-            <h1 className={`${styles.heroTitle} hero-title`}>
-              <span className={styles.heroTitleLine1}>
+            <h1 className={styles.heroTitle}>
+              <span className={`${styles.heroTitleLine1} hero-title-line-1`}>
                 ES AUTOMÁTICO
               </span>
-              <span className={styles.heroTitleLine2}>
+              <span className={`${styles.heroTitleLine2} hero-title-line-2`}>
                 ES SISTEMÁTICO
               </span>
-              <span className={styles.heroTitleLine3}>
+              <span className={`${styles.heroTitleLine3} hero-title-line-3`}>
                 ES HIDROMÁTICO
               </span>
             </h1>
 
             {/* Subtitle */}
-            <p className={`${styles.heroSubtitle} hero-subtitle`}>
+            <p className={`${styles.heroSubtitle} hero-subtitle-text`}>
               ¡Son los eventos más electrizantes!
             </p>
 
             {/* CTA Buttons */}
-            <div className={`${styles.heroCta} ${user ? styles.heroCtaCentered : ''} hero-cta`}>
-              <Link to="/events" className={styles.heroCtaButton}>
+            <div className={`${styles.heroCta} ${user ? styles.heroCtaCentered : ''}`}>
+              <Link to="/events" className={`${styles.heroCtaButton} hero-cta-button`}>
                 Ver Eventos
                 <ArrowRight className={styles.heroCtaButtonIcon} />
               </Link>
               {!user && (
-                <Link to="/auth" className={styles.heroCtaSecondary}>
+                <Link to="/auth" className={`${styles.heroCtaSecondary} hero-cta-button`}>
                   Iniciar Sesión
                 </Link>
               )}
@@ -182,14 +384,14 @@ const Home = () => {
         {/* Urgent Event CTA - Super dramatic */}
         {urgentEvent && (
           <section className={`${styles.urgentSection} ${styles.fadeInSection} fade-in-section`}>
-            <div className={styles.urgentCard}>
+            <div className={`${styles.urgentCard} urgent-card`}>
               {/* Glow effect */}
-              <div className={styles.urgentGlow1} />
-              <div className={styles.urgentGlow2} />
+              <div className={`${styles.urgentGlow1} urgent-glow`} />
+              <div className={`${styles.urgentGlow2} urgent-glow`} />
               
               <div className={styles.urgentContent}>
                 <div className={styles.urgentDetails}>
-                  <div className={styles.urgentBadge}>
+                  <div className={`${styles.urgentBadge} urgent-badge`}>
                     <Calendar className={styles.urgentBadgeIcon} />
                     <span className={styles.urgentBadgeText}>
                       ¡Fecha Límite Próxima!
@@ -197,13 +399,13 @@ const Home = () => {
                   </div>
                   
                   <div className={styles.urgentInfo}>
-                    <h3 className={styles.urgentTitle}>
+                    <h3 className={`${styles.urgentTitle} urgent-title`}>
                       {urgentEvent.title}
                     </h3>
-                    <p className={styles.urgentDescription}>
+                    <p className={`${styles.urgentDescription} urgent-description`}>
                       {urgentEvent.description}
                     </p>
-                    <div className={styles.urgentMeta}>
+                    <div className={`${styles.urgentMeta} urgent-meta`}>
                       <span className={styles.urgentDate}>
                         {new Date(urgentEvent.date).toLocaleDateString('es-ES', {
                           day: 'numeric',
@@ -216,7 +418,7 @@ const Home = () => {
                     </div>
                   </div>
                   
-                  <Link to={`/event/${urgentEvent.id}`} className={styles.urgentButton}>
+                  <Link to={`/event/${urgentEvent.id}`} className={`${styles.urgentButton} urgent-button`}>
                     Reservar Ahora - ${urgentEvent.price}
                     <ArrowRight className={styles.urgentButtonIcon} />
                   </Link>
@@ -226,7 +428,7 @@ const Home = () => {
                   <img
                     src={urgentEvent.image_url}
                     alt={urgentEvent.title}
-                    className={styles.urgentImage}
+                    className={`${styles.urgentImage} urgent-image`}
                   />
                 </div>
               </div>
