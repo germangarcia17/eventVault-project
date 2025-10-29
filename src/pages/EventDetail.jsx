@@ -127,14 +127,17 @@ const EventDetail = () => {
     try {
       setLoading(true);
 
-      // Create FREE reservation in Supabase (without QR and payment)
+      // Generate temporary unique QR code (will be replaced with final one after payment)
+      const tempQrCode = `TEMP-${user.id}-${id}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+      // Create reservation in Supabase with temporary QR
       const { data, error } = await supabase
         .from('reservations')
         .insert({
           user_id: user.id,
           event_id: id,
-          payment_status: 'pending'
-          // qr_code is intentionally omitted - it will be null by default and generated after payment
+          payment_status: 'pending',
+          qr_code: tempQrCode // Temporary unique QR code
         })
         .select()
         .single();

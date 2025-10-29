@@ -30,11 +30,14 @@ export const trackPageView = (path, title) => {
 // Track events
 export const trackEvent = (category, action, label = '', value = 0) => {
   if (import.meta.env.VITE_GA_ID) {
+    // Ensure value is always a number
+    const numericValue = typeof value === 'number' ? value : (Number(value) || 0);
+    
     ReactGA.event({
       category,
       action,
       label,
-      value,
+      value: numericValue,
     });
   }
 };

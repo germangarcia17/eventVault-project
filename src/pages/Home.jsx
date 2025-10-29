@@ -339,38 +339,44 @@ const Home = () => {
         // Re-enable body scroll
         document.body.style.overflow = 'auto';
         
-        // Animate both cover and main content simultaneously
-        const timeline = gsap.timeline({
-          onComplete: () => {
-            setShowCover(false);
-            setCoverAnimationComplete(true);
-            // Hide placeholder after a small delay to ensure content is ready
-            setTimeout(() => setShowPlaceholder(false), 100);
+        // Wait for placeholder to render before starting animation
+        setTimeout(() => {
+          // Animate both cover and main content simultaneously
+          const timeline = gsap.timeline({
+            onComplete: () => {
+              setShowCover(false);
+              setCoverAnimationComplete(true);
+              // Hide placeholder after a small delay to ensure content is ready
+              setTimeout(() => setShowPlaceholder(false), 100);
+            }
+          });
+          
+          // Cover zoom out and fade out
+          timeline.to('.cover-page', {
+            scale: 1.5,
+            opacity: 0,
+            duration: 1,
+            ease: 'power2.in'
+          }, 0);
+          
+          // Placeholder fade out (check if exists first)
+          const placeholderElement = document.querySelector('.content-placeholder');
+          if (placeholderElement) {
+            timeline.to('.content-placeholder', {
+              opacity: 0,
+              duration: 0.5,
+              ease: 'power2.in'
+            }, 0.5);
           }
-        });
-        
-        // Cover zoom out and fade out
-        timeline.to('.cover-page', {
-          scale: 1.5,
-          opacity: 0,
-          duration: 1,
-          ease: 'power2.in'
-        }, 0);
-        
-        // Placeholder fade out
-        timeline.to('.content-placeholder', {
-          opacity: 0,
-          duration: 0.5,
-          ease: 'power2.in'
-        }, 0.5);
-        
-        // Main content fade in at the same time
-        timeline.fromTo(
-          '.main-content',
-          { opacity: 0 },
-          { opacity: 1, duration: 1, ease: 'power2.out' },
-          0
-        );
+          
+          // Main content fade in at the same time
+          timeline.fromTo(
+            '.main-content',
+            { opacity: 0 },
+            { opacity: 1, duration: 1, ease: 'power2.out' },
+            0
+          );
+        }, 50); // Small delay to ensure DOM is updated
       };
 
       // Handle touch events for mobile
