@@ -3,6 +3,7 @@ import { Search, Filter, ChevronDown } from 'lucide-react';
 import { EventCard } from '@/components/EventCard';
 import { supabase } from '@/lib/supabase';
 import { gsap } from 'gsap';
+import { analytics } from '@/lib/analytics';
 import heroImage from '@/assets/hero-events.jpg';
 import styles from './Events.module.css';
 
@@ -14,6 +15,8 @@ const Events = () => {
 
   useEffect(() => {
     fetchEvents();
+    // Track event list view
+    analytics.trackEventListView();
   }, []);
 
   const fetchEvents = async () => {
@@ -95,7 +98,12 @@ const Events = () => {
               type="text"
               placeholder="Buscar eventos..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                if (e.target.value.length > 2) {
+                  analytics.trackSearch(e.target.value);
+                }
+              }}
               className={styles.searchInput}
             />
           </div>
@@ -104,7 +112,10 @@ const Events = () => {
             <div className={styles.selectWrapper}>
               <select
                 value={categoryFilter}
-                onChange={(e) => setCategoryFilter(e.target.value)}
+                onChange={(e) => {
+                  setCategoryFilter(e.target.value);
+                  analytics.trackFilter('Category', e.target.value);
+                }}
                 className={styles.select}
               >
                 <option value="all">Todas</option>

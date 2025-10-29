@@ -7,6 +7,7 @@ import { es } from 'date-fns/locale';
 import { gsap } from 'gsap';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from '@/hooks/use-toast';
+import { analytics } from '@/lib/analytics';
 import styles from './EventDetail.module.css';
 
 const EventDetail = () => {
@@ -49,6 +50,11 @@ const EventDetail = () => {
       if (error) throw error;
 
       setEvent(data);
+      
+      // Track event view
+      if (data) {
+        analytics.trackEventView(data.id, data.title);
+      }
 
       // Animate after DOM is ready
       if (data) {
@@ -95,6 +101,7 @@ const EventDetail = () => {
 
   const handleReserve = async () => {
     if (!user) {
+      analytics.trackCTAClick('Reservar (Not Logged In)', event.title);
       toast({
         title: 'Inicia sesión',
         description: 'Debes iniciar sesión para reservar',
@@ -114,17 +121,23 @@ const EventDetail = () => {
       return;
     }
 
+    // Track booking initiated
+    analytics.trackBookingInitiated(event.id, event.title, Number(event.price) || 0);
+
     try {
       setLoading(true);
 
-      // Create FREE reservation in Supabase (without QR and payment)
+      // Generate temporary unique QR code (will be replaced with final one after payment)
+      const tempQrCode = `TEMP-${user.id}-${id}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+      // Create reservation in Supabase with temporary QR
       const { data, error } = await supabase
         .from('reservations')
         .insert({
           user_id: user.id,
           event_id: id,
           payment_status: 'pending',
-          qr_code: '' // Empty string instead of null (QR will be generated after payment)
+          qr_code: tempQrCode // Temporary unique QR code
         })
         .select()
         .single();

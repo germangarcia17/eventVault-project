@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/hooks/useAuth';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { analytics } from '@/lib/analytics';
 import heroImage from '@/assets/hero-events.jpg';
 import styles from './Home.module.css';
 
@@ -338,38 +339,44 @@ const Home = () => {
         // Re-enable body scroll
         document.body.style.overflow = 'auto';
         
-        // Animate both cover and main content simultaneously
-        const timeline = gsap.timeline({
-          onComplete: () => {
-            setShowCover(false);
-            setCoverAnimationComplete(true);
-            // Hide placeholder after a small delay to ensure content is ready
-            setTimeout(() => setShowPlaceholder(false), 100);
+        // Wait for placeholder to render before starting animation
+        setTimeout(() => {
+          // Animate both cover and main content simultaneously
+          const timeline = gsap.timeline({
+            onComplete: () => {
+              setShowCover(false);
+              setCoverAnimationComplete(true);
+              // Hide placeholder after a small delay to ensure content is ready
+              setTimeout(() => setShowPlaceholder(false), 100);
+            }
+          });
+          
+          // Cover zoom out and fade out
+          timeline.to('.cover-page', {
+            scale: 1.5,
+            opacity: 0,
+            duration: 1,
+            ease: 'power2.in'
+          }, 0);
+          
+          // Placeholder fade out (check if exists first)
+          const placeholderElement = document.querySelector('.content-placeholder');
+          if (placeholderElement) {
+            timeline.to('.content-placeholder', {
+              opacity: 0,
+              duration: 0.5,
+              ease: 'power2.in'
+            }, 0.5);
           }
-        });
-        
-        // Cover zoom out and fade out
-        timeline.to('.cover-page', {
-          scale: 1.5,
-          opacity: 0,
-          duration: 1,
-          ease: 'power2.in'
-        }, 0);
-        
-        // Placeholder fade out
-        timeline.to('.content-placeholder', {
-          opacity: 0,
-          duration: 0.5,
-          ease: 'power2.in'
-        }, 0.5);
-        
-        // Main content fade in at the same time
-        timeline.fromTo(
-          '.main-content',
-          { opacity: 0 },
-          { opacity: 1, duration: 1, ease: 'power2.out' },
-          0
-        );
+          
+          // Main content fade in at the same time
+          timeline.fromTo(
+            '.main-content',
+            { opacity: 0 },
+            { opacity: 1, duration: 1, ease: 'power2.out' },
+            0
+          );
+        }, 50); // Small delay to ensure DOM is updated
       };
 
       // Handle touch events for mobile
@@ -504,12 +511,20 @@ const Home = () => {
 
             {/* CTA Buttons */}
             <div className={`${styles.heroCta} ${user ? styles.heroCtaCentered : ''}`}>
-              <Link to="/events" className={`${styles.heroCtaButton} hero-cta-button`}>
+              <Link 
+                to="/events" 
+                className={`${styles.heroCtaButton} hero-cta-button`}
+                onClick={() => analytics.trackCTAClick('Ver Eventos', 'Hero Section')}
+              >
                 Ver Eventos
                 <ArrowRight className={styles.heroCtaButtonIcon} />
               </Link>
               {!user && (
-                <Link to="/auth" className={`${styles.heroCtaSecondary} hero-cta-button`}>
+                <Link 
+                  to="/auth" 
+                  className={`${styles.heroCtaSecondary} hero-cta-button`}
+                  onClick={() => analytics.trackCTAClick('Iniciar Sesión', 'Hero Section')}
+                >
                   Iniciar Sesión
                 </Link>
               )}
@@ -553,7 +568,11 @@ const Home = () => {
           </div>
           
           <div className={styles.eventsButton}>
-            <Link to="/events" className={styles.eventsButtonLink}>
+            <Link 
+              to="/events" 
+              className={styles.eventsButtonLink}
+              onClick={() => analytics.trackCTAClick('Ver Todos los Eventos', 'Events Section')}
+            >
               Ver Todos los Eventos
               <ArrowRight className={styles.eventsButtonIcon} />
             </Link>
@@ -602,7 +621,11 @@ const Home = () => {
                     </div>
                   </div>
                   
-                  <Link to={`/event/${urgentEvent.id}`} className={`${styles.urgentButton} urgent-button`}>
+                  <Link 
+                    to={`/event/${urgentEvent.id}`} 
+                    className={`${styles.urgentButton} urgent-button`}
+                    onClick={() => analytics.trackCTAClick('Reservar Ahora', `Urgent Event - ${urgentEvent.title}`)}
+                  >
                     Reservar Ahora - ${urgentEvent.price}
                     <ArrowRight className={styles.urgentButtonIcon} />
                   </Link>
@@ -642,11 +665,19 @@ const Home = () => {
             </div>
             
             <div className={styles.finalButtons}>
-              <Link to="/auth" className={styles.finalPrimaryButton}>
+              <Link 
+                to="/auth" 
+                className={styles.finalPrimaryButton}
+                onClick={() => analytics.trackCTAClick('Crear Cuenta Gratis', 'Final CTA Section')}
+              >
                 Crear Cuenta Gratis
                 <ArrowRight className={styles.buttonIcon} />
               </Link>
-              <Link to="/events" className={styles.finalSecondaryButton}>
+              <Link 
+                to="/events" 
+                className={styles.finalSecondaryButton}
+                onClick={() => analytics.trackCTAClick('Ver Todos los Eventos', 'Final CTA Section')}
+              >
                 Ver Todos los Eventos
               </Link>
             </div>

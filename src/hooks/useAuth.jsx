@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@/hooks/use-toast';
+import { analytics } from '@/lib/analytics';
 
 const AuthContext = createContext(undefined);
 
@@ -31,6 +32,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
+      analytics.trackLogin('email');
       toast({ title: '¡Bienvenido!', description: 'Has iniciado sesión correctamente.' });
       navigate('/dashboard');
     } catch (error) {
@@ -53,6 +55,7 @@ export const AuthProvider = ({ children }) => {
         },
       });
       if (error) throw error;
+      analytics.trackSignup('email');
       toast({
         title: 'Cuenta creada',
         description: 'Revisa tu email para confirmar tu cuenta.',
@@ -69,6 +72,7 @@ export const AuthProvider = ({ children }) => {
   const signOut = async () => {
     try {
       await supabase.auth.signOut();
+      analytics.trackLogout();
       toast({ title: 'Sesión cerrada', description: 'Has cerrado sesión correctamente.' });
       navigate('/', { state: { fromInternal: true } });
     } catch (error) {

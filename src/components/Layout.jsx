@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Calendar, LogOut, User, Ticket } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
+import { analytics } from '@/lib/analytics';
 import styles from './Layout.module.css';
 
 export const Layout = ({ children }) => {
@@ -30,12 +31,14 @@ export const Layout = ({ children }) => {
               to="/"
               state={{ fromInternal: true }}
               className={`${styles.navLink} ${isActive('/') ? styles.navLinkActive : ''}`}
+              onClick={() => analytics.trackNavigation('Home')}
             >
               Inicio
             </Link>
             <Link
               to="/events"
               className={`${styles.navLink} ${isActive('/events') ? styles.navLinkActive : ''}`}
+              onClick={() => analytics.trackNavigation('Events')}
             >
               Eventos
             </Link>
@@ -44,6 +47,7 @@ export const Layout = ({ children }) => {
                 <Link
                   to="/dashboard"
                   className={`${styles.navLink} ${styles.navLinkHidden} ${isActive('/dashboard') ? styles.navLinkActive : ''}`}
+                  onClick={() => analytics.trackNavigation('Dashboard')}
                 >
                   Mis Reservas
                 </Link>
@@ -51,6 +55,7 @@ export const Layout = ({ children }) => {
                   <Link
                     to="/admin"
                     className={`${styles.navLink} ${isActive('/admin') ? styles.navLinkActive : ''}`}
+                    onClick={() => analytics.trackAdminAccess()}
                   >
                     Admin
                   </Link>
@@ -64,7 +69,11 @@ export const Layout = ({ children }) => {
                 </button>
               </>
             ) : (
-              <Link to="/auth" className={styles.loginButton}>
+              <Link 
+                to="/auth" 
+                className={styles.loginButton}
+                onClick={() => analytics.trackNavigation('Auth/Login')}
+              >
                 <User className={styles.loginIcon} />
                 <span className={styles.loginTextFull}>Iniciar Sesión</span>
                 <span className={styles.loginTextShort}>Login</span>

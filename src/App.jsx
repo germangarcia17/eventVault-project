@@ -2,10 +2,12 @@ import { Toaster } from "@/components/common/Toaster";
 import { Toaster as Sonner } from "@/components/common/Sonner";
 import { TooltipProvider } from "@/components/common/Tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { Layout } from "@/components/Layout";
 import { ProtectedAdminRoute } from "@/components/ProtectedAdminRoute";
+import { useEffect } from "react";
+import { initGA, trackPageView } from "@/lib/analytics";
 import Home from "./pages/Home";
 import Events from "./pages/Events";
 import EventDetail from "./pages/EventDetail";
@@ -21,13 +23,31 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-        <AuthProvider>
+// Component to track page views
+const AnalyticsTracker = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    trackPageView(location.pathname + location.search);
+  }, [location]);
+
+  return null;
+};
+
+const App = () => {
+  // Initialize Google Analytics on app mount
+  useEffect(() => {
+    initGA();
+  }, []);
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+          <AnalyticsTracker />
+          <AuthProvider>
           <Layout>
             <Routes>
               <Route path="/" element={<Home />} />
@@ -56,6 +76,7 @@ const App = () => (
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
-);
+  );
+};
 
 export default App;

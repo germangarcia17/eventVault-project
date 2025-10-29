@@ -7,6 +7,7 @@ import { supabase } from '@/lib/supabase';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { gsap } from 'gsap';
+import { analytics } from '@/lib/analytics';
 import styles from './Dashboard.module.css';
 
 const Dashboard = () => {
@@ -30,9 +31,13 @@ const Dashboard = () => {
   // Update tab if location state changes
   useEffect(() => {
     if (location.state?.activeTab) {
-      setActiveTab(location.state.activeTab);
+      const tab = location.state.activeTab;
+      setActiveTab(tab);
+      analytics.trackDashboardView(tab);
       // Clear the location state after reading it
       window.history.replaceState({}, document.title);
+    } else {
+      analytics.trackDashboardView(activeTab);
     }
   }, [location.state]);
 

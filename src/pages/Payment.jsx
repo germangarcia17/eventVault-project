@@ -5,6 +5,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { supabase } from '../lib/supabase';
 import { useToast } from '../hooks/use-toast';
+import { analytics } from '@/lib/analytics';
 import styles from './Payment.module.css';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
@@ -23,6 +24,9 @@ function CheckoutForm({ reservation, event, onSuccess }) {
     }
 
     setProcessing(true);
+    
+    // Track payment initiated
+    analytics.trackPaymentInitiated(event.id, event.title, Number(event.price) || 0);
 
     try {
       const cardElement = elements.getElement(CardElement);
@@ -55,6 +59,10 @@ function CheckoutForm({ reservation, event, onSuccess }) {
 
       if (updateError) throw updateError;
 
+      // Track successful payment
+      analytics.trackPaymentSuccess(event.id, event.title, Number(event.price) || 0);
+      analytics.trackBookingCompleted(event.id, event.title, Number(event.price) || 0);
+
       toast({
         title: '¡Pago exitoso!',
         description: 'Tu entrada ha sido confirmada. Recibirás un correo con tu código QR.',
@@ -63,6 +71,10 @@ function CheckoutForm({ reservation, event, onSuccess }) {
       onSuccess();
     } catch (error) {
       console.error('Payment error:', error);
+      
+      // Track failed payment
+      analytics.trackPaymentFailed(event.id, event.title, error.message);
+      
       toast({
         title: 'Error en el pago',
         description: error.message || 'No se pudo procesar el pago. Por favor, intenta de nuevo.',
@@ -90,15 +102,22 @@ function CheckoutForm({ reservation, event, onSuccess }) {
           options={{
             style: {
               base: {
-                fontSize: '16px',
-                color: '#1a1a1a',
+                fontSize: '18px',
+                color: '#0a0a0a',
+                backgroundColor: '#ffffff',
                 '::placeholder': {
-                  color: '#6b7280',
+                  color: '#52525b',
                 },
                 fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+                fontWeight: '500',
+                lineHeight: '24px',
               },
               invalid: {
-                color: '#ef4444',
+                color: '#dc2626',
+                iconColor: '#dc2626',
+              },
+              complete: {
+                color: '#0a0a0a',
               },
             },
             hidePostalCode: true,
