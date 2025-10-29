@@ -102,15 +102,22 @@ function CheckoutForm({ reservation, event, onSuccess }) {
           options={{
             style: {
               base: {
-                fontSize: '16px',
-                color: '#1a1a1a',
+                fontSize: '18px',
+                color: '#0a0a0a',
+                backgroundColor: '#ffffff',
                 '::placeholder': {
-                  color: '#6b7280',
+                  color: '#52525b',
                 },
                 fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+                fontWeight: '500',
+                lineHeight: '24px',
               },
               invalid: {
-                color: '#ef4444',
+                color: '#dc2626',
+                iconColor: '#dc2626',
+              },
+              complete: {
+                color: '#0a0a0a',
               },
             },
             hidePostalCode: true,

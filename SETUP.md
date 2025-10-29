@@ -256,9 +256,55 @@ VITE_SUPABASE_ANON_KEY=tu_anon_key_de_supabase
 # Stripe (modo test)
 VITE_STRIPE_PUBLISHABLE_KEY=pk_test_tu_publishable_key
 STRIPE_SECRET_KEY=sk_test_tu_secret_key
+
+# Google Analytics (opcional)
+VITE_GA_ID=G-XXXXXXXXXX
 ```
 
 ⚠️ **Importante**: Nunca subas el archivo `.env` a git. Ya está incluido en `.gitignore`.
+
+### 3. Tarjetas de Prueba para Stripe
+
+Cuando estés en **modo test**, usa estas tarjetas de prueba:
+
+#### ✅ **Pago Exitoso**
+```
+Número de tarjeta:  4242 4242 4242 4242
+Fecha de vencimiento: Cualquier fecha futura (ej: 12/25)
+CVC: Cualquier 3 dígitos (ej: 123)
+Código postal: Cualquier (ej: 12345)
+```
+
+#### ❌ **Pagos con Errores (para testing)**
+
+**Tarjeta declinada - fondos insuficientes:**
+```
+4000 0000 0000 9995
+```
+
+**Tarjeta declinada - genérica:**
+```
+4000 0000 0000 0002
+```
+
+**Requiere autenticación (3D Secure):**
+```
+4000 0025 0000 3155
+```
+
+**Pago exitoso pero requiere autenticación:**
+```
+4000 0027 6000 3184
+```
+
+#### 💡 **Consejos para Testing**
+- Usa **cualquier dirección de email** válida
+- Usa **cualquier nombre** en el campo del titular
+- La **fecha de expiración** debe ser futura
+- El **CVC** puede ser cualquier número de 3 dígitos
+- El **código postal** puede ser cualquier valor
+
+📚 **Más información**: [Stripe Test Cards](https://stripe.com/docs/testing#cards)
 
 ---
 

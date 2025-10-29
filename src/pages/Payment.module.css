@@ -163,17 +163,18 @@
 }
 
 .cardElementWrapper {
-  padding: 1.25rem;
-  background: hsl(var(--background));
+  padding: 1.5rem;
+  background: #ffffff;
   border: 2px solid hsl(var(--border));
   border-radius: 0.75rem;
   margin-bottom: 1.5rem;
   transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .cardElementWrapper:focus-within {
   border-color: hsl(var(--primary));
-  box-shadow: 0 0 0 3px hsla(var(--primary), 0.1);
+  box-shadow: 0 0 0 3px hsla(var(--primary), 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .submitButton {
