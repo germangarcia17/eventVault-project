@@ -1,7 +1,158 @@
 /* Home page styles */
+::-webkit-scrollbar {
+    display: none;
+}
+
+/* Content Placeholder - Prevents footer from showing during transition */
+.contentPlaceholder {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
+  z-index: 9998;
+  pointer-events: none;
+}
+
+/* Cover Page - Full viewport splash screen */
+.coverPage {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.coverContent {
+  position: relative;
+  text-align: center;
+  padding: 2rem;
+  max-width: 900px;
+  z-index: 2;
+}
+
+.coverGlow1,
+.coverGlow2 {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.coverGlow1 {
+  top: 20%;
+  left: 10%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.4) 0%, transparent 70%);
+}
+
+.coverGlow2 {
+  bottom: 20%;
+  right: 10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, transparent 70%);
+}
+
+.coverTitle {
+  margin: 0;
+  padding: 0;
+}
+
+.coverTitleMain {
+  display: block;
+  font-size: clamp(3rem, 12vw, 8rem);
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  background: linear-gradient(135deg, #fff 0%, #d4af37 50%, #ffd700 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 80px rgba(212, 175, 55, 0.5);
+  margin-bottom: 2.5rem;
+}
+
+.coverTagline {
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  margin: 1rem auto;
+  max-width: 600px;
+  line-height: 1.6;
+}
+
+.coverScrollIndicator {
+  margin-top: 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+}
+
+.scrollText {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-weight: 500;
+}
+
+.scrollArrow {
+  width: 50px;
+  height: 50px;
+  border: 2px solid rgba(212, 175, 55, 0.5);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.scrollArrowIcon {
+  width: 24px;
+  height: 24px;
+  color: #d4af37;
+  transform: rotate(90deg);
+}
+
+.scrollArrow:hover {
+  border-color: rgba(212, 175, 55, 0.8);
+  background: rgba(212, 175, 55, 0.1);
+  transform: scale(1.1);
+}
+
+/* Cover Page Responsive */
+@media (max-width: 768px) {
+  .coverTitleMain {
+    font-size: clamp(2.5rem, 10vw, 4rem);
+  }
+  
+  .coverTagline {
+    font-size: 1rem;
+    padding: 0 1rem;
+  }
+  
+  .coverScrollIndicator {
+    margin-top: 3rem;
+  }
+}
+
 .container {
   margin-left: -1rem;
   margin-right: -1rem;
+  transition: opacity 0.3s ease;
 }
 
 @media (min-width: 768px) {
@@ -20,9 +171,13 @@
 /* Hero Section */
 .heroSection {
   position: relative;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
   min-height: 85vh;
   overflow: hidden;
   margin-top: -2rem;
+  z-index: 1;
 }
 
 @media (min-width: 768px) {
@@ -35,6 +190,7 @@
   position: absolute;
   inset: 0;
   background-color: #000;
+  opacity: 1;
 }
 
 .heroImage {
@@ -56,7 +212,7 @@
   position: absolute;
   inset: 0;
   background: linear-gradient(to bottom right, hsla(45, 100%, 55%, 0.1), transparent, transparent);
-  opacity: 0.5;
+  opacity: 0;
 }
 
 .heroContent {
@@ -92,6 +248,7 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: hsl(45, 100%, 55%);
+  opacity: 0;
 }
 
 .heroBadgeIcon {
@@ -128,6 +285,7 @@
   color: #fff;
   text-shadow: var(--shadow-glow-strong);
   filter: drop-shadow(0 25px 25px rgb(0 0 0 / 0.15));
+  opacity: 0;
 }
 
 .heroTitleLine2 {
@@ -139,6 +297,7 @@
   color: transparent;
   text-shadow: var(--shadow-glow-strong);
   filter: drop-shadow(0 25px 25px rgb(0 0 0 / 0.15));
+  opacity: 0;
 }
 
 .heroTitleLine3 {
@@ -146,7 +305,7 @@
 }
 
 .heroSubtitle {
-  margin: 0 auto 3rem;
+  margin: 0 auto 2rem;
   max-width: 48rem;
   font-size: 1.5rem;
   font-weight: 700;
@@ -154,6 +313,7 @@
   letter-spacing: 0.025em;
   color: rgba(255, 255, 255, 0.9);
   filter: drop-shadow(0 10px 8px rgb(0 0 0 / 0.04)) drop-shadow(0 4px 3px rgb(0 0 0 / 0.1));
+  opacity: 0;
 }
 
 @media (min-width: 768px) {

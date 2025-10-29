@@ -186,7 +186,7 @@ const EventDetail = () => {
     <div className={styles.container}>
       <div className={styles.eventDetail}>
         <button
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/', { state: { fromInternal: true } })}
           className={styles.backButton}
         >
           <ArrowLeft />

@@ -35,7 +35,7 @@ const Cancel = () => {
             <button className={styles.button} onClick={() => navigate(-1)}>
               Volver al Evento
             </button>
-            <button className={`${styles.button} ${styles.buttonOutline}`} onClick={() => navigate('/')}>
+            <button className={`${styles.button} ${styles.buttonOutline}`} onClick={() => navigate('/', { state: { fromInternal: true } })}>
               Ver Todos los Eventos
             </button>
           </div>

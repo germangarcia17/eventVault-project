@@ -49,7 +49,7 @@ export const ProtectedAdminRoute = ({ children }) => {
 
   // Redirect to home if logged in but not admin
   if (!isAdmin) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/" replace state={{ fromInternal: true }} />;
   }
 
   // User is admin, render the protected content

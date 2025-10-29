@@ -70,7 +70,7 @@ export const AuthProvider = ({ children }) => {
     try {
       await supabase.auth.signOut();
       toast({ title: 'Sesión cerrada', description: 'Has cerrado sesión correctamente.' });
-      navigate('/');
+      navigate('/', { state: { fromInternal: true } });
     } catch (error) {
       toast({
         title: 'Error',
