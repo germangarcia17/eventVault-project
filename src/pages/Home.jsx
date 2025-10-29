@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Calendar, ArrowRight, Sparkles, Zap } from 'lucide-react';
 import { EventCard } from '@/components/EventCard';
 import { supabase } from '@/lib/supabase';
@@ -13,8 +13,31 @@ gsap.registerPlugin(ScrollTrigger);
 
 const Home = () => {
   const { user } = useAuth();
+  const location = useLocation();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  
+  // Check if user should see cover:
+  // - Not if coming from internal navigation (location.state)
+  // - Not if they've already seen it in this session
+  const shouldShowCover = () => {
+    // Check if coming from internal navigation
+    if (location.state?.fromInternal) {
+      return false;
+    }
+    
+    // Check if already seen in this session
+    const hasSeenCover = sessionStorage.getItem('hasSeenCover');
+    if (hasSeenCover === 'true') {
+      return false;
+    }
+    
+    return true;
+  };
+  
+  const [showCover, setShowCover] = useState(shouldShowCover());
+  const [coverAnimationComplete, setCoverAnimationComplete] = useState(!shouldShowCover());
+  const [showPlaceholder, setShowPlaceholder] = useState(false);
 
   useEffect(() => {
     fetchEvents();
@@ -39,65 +62,49 @@ const Home = () => {
   };
 
   useEffect(() => {
-    if (!loading) {
-      // HERO SECTION ANIMATIONS - Load immediately
-      gsap.fromTo(
-        '.hero-background',
-        { scale: 1.2, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 1.5, ease: 'power3.out' }
-      );
-
-      gsap.fromTo(
-        '.hero-image',
-        { scale: 1.3, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 1.8, ease: 'power2.out' }
-      );
-
+    if (!loading && coverAnimationComplete) {
+      // HERO SECTION ANIMATIONS - Load after cover is gone
+      // Background and image are already visible, animate content only
+      
       // Hero badge animation
       gsap.fromTo(
         '.hero-badge',
         { opacity: 0, scale: 0.5, y: -20 },
-        { opacity: 1, scale: 1, y: 0, duration: 0.8, delay: 0.3, ease: 'back.out(1.7)' }
+        { opacity: 1, scale: 1, y: 0, duration: 0.8, delay: 0.2, ease: 'back.out(1.7)' }
       );
 
       // Dramatic title animations - each line separately
       gsap.fromTo(
         '.hero-title-line-1',
         { opacity: 0, x: -100, rotationX: -90 },
-        { opacity: 1, x: 0, rotationX: 0, duration: 1, delay: 0.5, ease: 'power4.out' }
+        { opacity: 1, x: 0, rotationX: 0, duration: 1, delay: 0.4, ease: 'power4.out' }
       );
 
       gsap.fromTo(
         '.hero-title-line-2',
         { opacity: 0, x: 100, rotationX: -90 },
-        { opacity: 1, x: 0, rotationX: 0, duration: 1, delay: 0.7, ease: 'power4.out' }
-      );
-
-      gsap.fromTo(
-        '.hero-title-line-3',
-        { opacity: 0, x: -100, rotationX: -90 },
-        { opacity: 1, x: 0, rotationX: 0, duration: 1, delay: 0.9, ease: 'power4.out' }
+        { opacity: 1, x: 0, rotationX: 0, duration: 1, delay: 0.6, ease: 'power4.out' }
       );
 
       // Hero subtitle animation
       gsap.fromTo(
         '.hero-subtitle-text',
         { opacity: 0, y: 30, scale: 0.9 },
-        { opacity: 1, y: 0, scale: 1, duration: 0.8, delay: 1.2, ease: 'power3.out' }
+        { opacity: 1, y: 0, scale: 1, duration: 0.8, delay: 0.8, ease: 'power3.out' }
       );
 
       // Hero CTA buttons
       gsap.fromTo(
         '.hero-cta-button',
         { opacity: 0, y: 30, scale: 0.8 },
-        { opacity: 1, y: 0, scale: 1, duration: 0.8, delay: 1.4, ease: 'back.out(1.5)' }
+        { opacity: 1, y: 0, scale: 1, duration: 0.8, delay: 1.0, ease: 'back.out(1.5)', stagger: 0.1 }
       );
 
       // Light rays effect
       gsap.fromTo(
         '.hero-light-rays',
         { opacity: 0, scale: 0.8 },
-        { opacity: 1, scale: 1, duration: 2, delay: 0.5, ease: 'power2.out' }
+        { opacity: 0.5, scale: 1, duration: 2, delay: 0.3, ease: 'power2.out' }
       );
 
       // EVENTS SECTION - Trigger on scroll
@@ -265,7 +272,142 @@ const Home = () => {
     return () => {
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
-  }, [loading]);
+  }, [loading, coverAnimationComplete]);
+
+  // Cover page scroll animation
+  useEffect(() => {
+    if (showCover && !loading) {
+      // Block body scroll initially
+      document.body.style.overflow = 'hidden';
+      
+      // Animate cover entrance
+      gsap.fromTo(
+        '.cover-title',
+        { opacity: 0, y: 50, scale: 0.9 },
+        { opacity: 1, y: 0, scale: 1, duration: 1.2, delay: 0.3, ease: 'power3.out' }
+      );
+
+      gsap.fromTo(
+        '.cover-tagline',
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 1, delay: 0.8, ease: 'power2.out' }
+      );
+
+      gsap.fromTo(
+        '.cover-scroll-indicator',
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 1, delay: 1.2, ease: 'power2.out' }
+      );
+
+      // Add bounce animation to scroll indicator
+      gsap.to('.cover-scroll-indicator', {
+        y: 10,
+        duration: 0.8,
+        delay: 2,
+        repeat: -1,
+        yoyo: true,
+        ease: 'power1.inOut'
+      });
+
+      let scrollCount = 0;
+      const scrollThreshold = 2; // Number of scroll events needed
+
+      // Handle scroll/wheel event
+      const handleWheel = (e) => {
+        if (e.deltaY > 0) { // Only count downward scrolls
+          scrollCount++;
+          
+          if (scrollCount >= scrollThreshold) {
+            // Trigger transition
+            triggerTransition();
+          }
+        }
+      };
+
+      const triggerTransition = () => {
+        // Remove listeners
+        window.removeEventListener('wheel', handleWheel);
+        window.removeEventListener('touchmove', handleTouchMove);
+        
+        // Mark that user has seen the cover in this session
+        sessionStorage.setItem('hasSeenCover', 'true');
+        
+        // Show placeholder immediately
+        setShowPlaceholder(true);
+        
+        // Re-enable body scroll
+        document.body.style.overflow = 'auto';
+        
+        // Animate both cover and main content simultaneously
+        const timeline = gsap.timeline({
+          onComplete: () => {
+            setShowCover(false);
+            setCoverAnimationComplete(true);
+            // Hide placeholder after a small delay to ensure content is ready
+            setTimeout(() => setShowPlaceholder(false), 100);
+          }
+        });
+        
+        // Cover zoom out and fade out
+        timeline.to('.cover-page', {
+          scale: 1.5,
+          opacity: 0,
+          duration: 1,
+          ease: 'power2.in'
+        }, 0);
+        
+        // Placeholder fade out
+        timeline.to('.content-placeholder', {
+          opacity: 0,
+          duration: 0.5,
+          ease: 'power2.in'
+        }, 0.5);
+        
+        // Main content fade in at the same time
+        timeline.fromTo(
+          '.main-content',
+          { opacity: 0 },
+          { opacity: 1, duration: 1, ease: 'power2.out' },
+          0
+        );
+      };
+
+      // Handle touch events for mobile
+      let touchStartY = 0;
+      let touchMoveCount = 0;
+
+      const handleTouchStart = (e) => {
+        touchStartY = e.touches[0].clientY;
+      };
+
+      const handleTouchMove = (e) => {
+        const touchY = e.touches[0].clientY;
+        const deltaY = touchStartY - touchY;
+        
+        if (deltaY > 50) { // Swipe up detected
+          touchMoveCount++;
+          
+          if (touchMoveCount >= scrollThreshold) {
+            triggerTransition();
+          }
+        }
+      };
+
+      window.addEventListener('wheel', handleWheel, { passive: true });
+      window.addEventListener('touchstart', handleTouchStart, { passive: true });
+      window.addEventListener('touchmove', handleTouchMove, { passive: true });
+
+      return () => {
+        window.removeEventListener('wheel', handleWheel);
+        window.removeEventListener('touchstart', handleTouchStart);
+        window.removeEventListener('touchmove', handleTouchMove);
+        document.body.style.overflow = 'auto';
+      };
+    } else if (!showCover && coverAnimationComplete) {
+      // If cover is not shown (already seen in session), show content immediately
+      gsap.set('.main-content', { opacity: 1 });
+    }
+  }, [showCover, loading, coverAnimationComplete]);
 
   // Get the 4 upcoming events sorted by date
   const upcomingEvents = [...events]
@@ -276,8 +418,53 @@ const Home = () => {
   const urgentEvent = upcomingEvents[0];
 
   return (
-    <div className={styles.container}>
-      <div className={styles.sectionSpacing}>
+    <>
+      {/* Cover Page - Only shown on first visit */}
+      {showCover && (
+        <div className={`${styles.coverPage} cover-page`}>
+          <div className={styles.coverContent}>
+            <div className={styles.coverGlow1} />
+            <div className={styles.coverGlow2} />
+              
+              <h1 className={`${styles.coverTitle} cover-title`}>
+                <span className={styles.coverTitleMain}>EventVault</span>
+              </h1>
+              
+              <p className={`${styles.coverTagline} cover-tagline`}>
+                Descubre experiencias inolvidables,
+              </p>
+              <p className={`${styles.coverTagline} cover-tagline`}>
+                Reserva momentos extraordinarios
+              </p>
+              
+              <div className={`${styles.coverScrollIndicator} cover-scroll-indicator`}>
+                <div className={styles.scrollText}>Desliza para explorar</div>
+                <div className={styles.scrollArrow}>
+                  <ArrowRight className={styles.scrollArrowIcon} />
+                </div>
+              </div>
+            </div>
+        </div>
+      )}
+
+      {/* Placeholder to prevent footer from showing during transition */}
+      {showPlaceholder && (
+        <div className={`${styles.contentPlaceholder} content-placeholder`} />
+      )}
+
+      {/* Main Content */}
+      <div 
+        className={`${styles.container} main-content`}
+        style={{ 
+          opacity: showCover ? 0 : 1,
+          position: showCover ? 'fixed' : 'relative',
+          top: showCover ? 0 : 'auto',
+          left: showCover ? 0 : 'auto',
+          right: showCover ? 0 : 'auto',
+          visibility: showCover ? 'hidden' : 'visible'
+        }}
+      >
+        <div className={styles.sectionSpacing}>
         {/* Hero Section - Ultra dramatic inspired by thescotch.org */}
         <section className={styles.heroSection}>
           {/* Background with overlay */}
@@ -307,9 +494,6 @@ const Home = () => {
               </span>
               <span className={`${styles.heroTitleLine2} hero-title-line-2`}>
                 ES SISTEMÁTICO
-              </span>
-              <span className={`${styles.heroTitleLine3} hero-title-line-3`}>
-                ES HIDROMÁTICO
               </span>
             </h1>
 
@@ -470,6 +654,7 @@ const Home = () => {
         </section>
       </div>
     </div>
+    </>
   );
 };
 

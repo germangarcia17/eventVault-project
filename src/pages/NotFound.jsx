@@ -34,7 +34,7 @@ const NotFound = () => {
           <p className={styles.message}>
             La página que buscas no se encuentra disponible o ha sido movida.
           </p>
-          <button className={styles.button} onClick={() => navigate('/')}>
+          <button className={styles.button} onClick={() => navigate('/', { state: { fromInternal: true } })}>
             <Home />
             Volver al Inicio
           </button>

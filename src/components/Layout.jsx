@@ -16,7 +16,7 @@ export const Layout = ({ children }) => {
     <div className={styles.container}>
       <header className={styles.header}>
         <div className={styles.headerContainer}>
-          <Link to="/" className={styles.logo}>
+          <Link to="/" className={styles.logo} state={{ fromInternal: true }}>
             <div className={styles.logoIconWrapper}>
               <Ticket className={styles.logoIcon} />
             </div>
@@ -28,6 +28,7 @@ export const Layout = ({ children }) => {
           <nav className={styles.nav}>
             <Link
               to="/"
+              state={{ fromInternal: true }}
               className={`${styles.navLink} ${isActive('/') ? styles.navLinkActive : ''}`}
             >
               Inicio
@@ -97,7 +98,7 @@ export const Layout = ({ children }) => {
             <div className={styles.footerSection}>
               <h3 className={styles.footerTitle}>Enlaces Rápidos</h3>
               <ul className={styles.footerLinks}>
-                <li><Link to="/" className={styles.footerLink}>Inicio</Link></li>
+                <li><Link to="/" state={{ fromInternal: true }} className={styles.footerLink}>Inicio</Link></li>
                 <li><Link to="/events" className={styles.footerLink}>Eventos</Link></li>
                 <li><Link to="/auth" className={styles.footerLink}>Iniciar Sesión</Link></li>
               </ul>

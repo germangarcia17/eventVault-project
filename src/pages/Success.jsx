@@ -38,7 +38,7 @@ const Success = () => {
             <button className={styles.button} onClick={() => navigate('/dashboard')}>
               Ver Mis Reservas
             </button>
-            <button className={`${styles.button} ${styles.buttonOutline}`} onClick={() => navigate('/')}>
+            <button className={`${styles.button} ${styles.buttonOutline}`} onClick={() => navigate('/', { state: { fromInternal: true } })}>
               Explorar Más Eventos
             </button>
           </div>
