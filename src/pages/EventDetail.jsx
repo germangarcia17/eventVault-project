@@ -122,7 +122,7 @@ const EventDetail = () => {
     }
 
     // Track booking initiated
-    analytics.trackBookingInitiated(event.id, event.title, event.price);
+    analytics.trackBookingInitiated(event.id, event.title, Number(event.price) || 0);
 
     try {
       setLoading(true);
@@ -133,8 +133,8 @@ const EventDetail = () => {
         .insert({
           user_id: user.id,
           event_id: id,
-          payment_status: 'pending',
-          qr_code: '' // Empty string instead of null (QR will be generated after payment)
+          payment_status: 'pending'
+          // qr_code is intentionally omitted - it will be null by default and generated after payment
         })
         .select()
         .single();

@@ -26,7 +26,7 @@ function CheckoutForm({ reservation, event, onSuccess }) {
     setProcessing(true);
     
     // Track payment initiated
-    analytics.trackPaymentInitiated(event.id, event.title, event.price);
+    analytics.trackPaymentInitiated(event.id, event.title, Number(event.price) || 0);
 
     try {
       const cardElement = elements.getElement(CardElement);
@@ -60,8 +60,8 @@ function CheckoutForm({ reservation, event, onSuccess }) {
       if (updateError) throw updateError;
 
       // Track successful payment
-      analytics.trackPaymentSuccess(event.id, event.title, event.price);
-      analytics.trackBookingCompleted(event.id, event.title, event.price);
+      analytics.trackPaymentSuccess(event.id, event.title, Number(event.price) || 0);
+      analytics.trackBookingCompleted(event.id, event.title, Number(event.price) || 0);
 
       toast({
         title: '¡Pago exitoso!',
