@@ -7,6 +7,7 @@ import { es } from 'date-fns/locale';
 import { gsap } from 'gsap';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from '@/hooks/use-toast';
+import { analytics } from '@/lib/analytics';
 import styles from './EventDetail.module.css';
 
 const EventDetail = () => {
@@ -49,6 +50,11 @@ const EventDetail = () => {
       if (error) throw error;
 
       setEvent(data);
+      
+      // Track event view
+      if (data) {
+        analytics.trackEventView(data.id, data.title);
+      }
 
       // Animate after DOM is ready
       if (data) {
@@ -95,6 +101,7 @@ const EventDetail = () => {
 
   const handleReserve = async () => {
     if (!user) {
+      analytics.trackCTAClick('Reservar (Not Logged In)', event.title);
       toast({
         title: 'Inicia sesión',
         description: 'Debes iniciar sesión para reservar',
@@ -113,6 +120,9 @@ const EventDetail = () => {
       navigate('/dashboard');
       return;
     }
+
+    // Track booking initiated
+    analytics.trackBookingInitiated(event.id, event.title, event.price);
 
     try {
       setLoading(true);
