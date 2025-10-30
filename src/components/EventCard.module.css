@@ -11,7 +11,7 @@
 
 .card:hover {
   border-color: hsla(45, 100%, 55%, 0.5);
-  box-shadow: var(--shadow-glow);
+  box-shadow: var(--shadow-glow-hover), var(--shadow-card);
   transform: translateY(-0.5rem);
 }
 
@@ -64,40 +64,47 @@
   font-size: 0.75rem;
 }
 
+/* Category Badges - More vibrant and distinctive */
 .badgeMusic {
-  background-color: hsla(280, 65%, 50%, 0.2);
-  color: hsl(280, 65%, 65%);
-  border-color: hsla(280, 65%, 50%, 0.3);
+  background-color: hsla(280, 70%, 55%, 0.15);
+  color: hsl(280, 80%, 70%);
+  border-color: hsla(280, 70%, 55%, 0.4);
+  text-shadow: 0 0 10px hsla(280, 70%, 55%, 0.5);
 }
 
 .badgeSports {
-  background-color: hsla(220, 65%, 50%, 0.2);
-  color: hsl(220, 65%, 65%);
-  border-color: hsla(220, 65%, 50%, 0.3);
+  background-color: hsla(200, 80%, 55%, 0.15);
+  color: hsl(200, 90%, 70%);
+  border-color: hsla(200, 80%, 55%, 0.4);
+  text-shadow: 0 0 10px hsla(200, 80%, 55%, 0.5);
 }
 
 .badgeArts {
-  background-color: hsla(330, 65%, 50%, 0.2);
-  color: hsl(330, 65%, 65%);
-  border-color: hsla(330, 65%, 50%, 0.3);
+  background-color: hsla(330, 75%, 55%, 0.15);
+  color: hsl(330, 85%, 70%);
+  border-color: hsla(330, 75%, 55%, 0.4);
+  text-shadow: 0 0 10px hsla(330, 75%, 55%, 0.5);
 }
 
 .badgeTech {
-  background-color: hsla(190, 65%, 50%, 0.2);
-  color: hsl(190, 65%, 65%);
-  border-color: hsla(190, 65%, 50%, 0.3);
+  background-color: hsla(190, 85%, 55%, 0.15);
+  color: hsl(190, 95%, 70%);
+  border-color: hsla(190, 85%, 55%, 0.4);
+  text-shadow: 0 0 10px hsla(190, 85%, 55%, 0.5);
 }
 
 .badgeFood {
-  background-color: hsla(30, 65%, 50%, 0.2);
-  color: hsl(30, 65%, 65%);
-  border-color: hsla(30, 65%, 50%, 0.3);
+  background-color: hsla(30, 85%, 55%, 0.15);
+  color: hsl(30, 95%, 70%);
+  border-color: hsla(30, 85%, 55%, 0.4);
+  text-shadow: 0 0 10px hsla(30, 85%, 55%, 0.5);
 }
 
 .badgeWorkshop {
-  background-color: hsla(140, 65%, 50%, 0.2);
-  color: hsl(140, 65%, 65%);
-  border-color: hsla(140, 65%, 50%, 0.3);
+  background-color: hsla(140, 75%, 50%, 0.15);
+  color: hsl(140, 85%, 65%);
+  border-color: hsla(140, 75%, 50%, 0.4);
+  text-shadow: 0 0 10px hsla(140, 75%, 50%, 0.5);
 }
 
 .content {

@@ -42,8 +42,8 @@
 .coverGlow2 {
   position: absolute;
   border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.4;
+  filter: blur(100px);
+  opacity: 0.25;
   pointer-events: none;
 }
 
@@ -52,7 +52,7 @@
   left: 10%;
   width: 400px;
   height: 400px;
-  background: radial-gradient(circle, rgba(212, 175, 55, 0.4) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.3) 0%, transparent 70%);
 }
 
 .coverGlow2 {
@@ -60,7 +60,7 @@
   right: 10%;
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(147, 112, 219, 0.25) 0%, transparent 70%);
 }
 
 .coverTitle {
@@ -78,7 +78,7 @@
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 80px rgba(212, 175, 55, 0.5);
+  text-shadow: 0 0 40px rgba(212, 175, 55, 0.3);
   margin-bottom: 2.5rem;
 }
 
@@ -283,7 +283,7 @@
 .heroTitleLine3 {
   display: block;
   color: #fff;
-  text-shadow: var(--shadow-glow-strong);
+  text-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
   filter: drop-shadow(0 25px 25px rgb(0 0 0 / 0.15));
   opacity: 0;
 }
@@ -295,7 +295,7 @@
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
-  text-shadow: var(--shadow-glow-strong);
+  text-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
   filter: drop-shadow(0 25px 25px rgb(0 0 0 / 0.15));
   opacity: 0;
 }
@@ -361,8 +361,8 @@
 }
 
 .heroCtaButton:hover {
-  box-shadow: var(--shadow-glow-strong);
-  transform: scale(1.05);
+  box-shadow: var(--shadow-glow-hover);
+  transform: translateY(-2px);
 }
 
 .heroCtaButtonIcon {
@@ -396,9 +396,10 @@
 }
 
 .heroCtaSecondary:hover {
-  background-color: hsl(45, 100%, 55%);
-  color: #000;
-  box-shadow: var(--shadow-glow);
+  background-color: hsla(250, 65%, 60%, 0.2);
+  border-color: hsl(250, 65%, 60%);
+  color: #fff;
+  box-shadow: var(--shadow-accent);
 }
 
 .heroBottomGradient {
