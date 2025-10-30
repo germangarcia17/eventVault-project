@@ -221,6 +221,9 @@ class App {
     this.onItemClick = onItemClick;
     this.medias = null; // Inicializar como null
     this.isInitialized = false;
+    this.isDragging = false; // Flag para detectar drag vs click
+    this.isDown = false;
+    this.clickStartTime = 0;
     this.createRenderer();
     this.createCamera();
     this.createScene();
@@ -303,17 +306,37 @@ class App {
     this.isDown = true;
     this.scroll.position = this.scroll.current;
     this.start = e.touches ? e.touches[0].clientX : e.clientX;
+    this.isDragging = false; // Reset dragging flag
+    this.clickStartTime = Date.now(); // Track click duration
   }
 
   onTouchMove(e) {
     if (!this.isDown) return;
     const x = e.touches ? e.touches[0].clientX : e.clientX;
     const distance = (this.start - x) * (this.scrollSpeed * 0.025);
+    
+    // If moved more than 5 pixels, consider it a drag
+    if (Math.abs(this.start - x) > 5) {
+      this.isDragging = true;
+    }
+    
     this.scroll.target = this.scroll.position + distance;
   }
 
-  onTouchUp() {
+  onTouchUp(e) {
     this.isDown = false;
+    const clickDuration = Date.now() - (this.clickStartTime || 0);
+    
+    // If released quickly and didn't drag, it's a click
+    if (!this.isDragging && clickDuration < 300) {
+      // Trigger click after a tiny delay to ensure it's processed
+      setTimeout(() => {
+        if (this.onClick) {
+          this.onClick(e);
+        }
+      }, 10);
+    }
+    
     if (this.isInitialized) {
       this.onCheck();
     }
@@ -321,13 +344,23 @@ class App {
 
   onClick(e) {
     // Only trigger click if not dragging and component is initialized
-    if (!this.isInitialized || this.scroll.current !== this.scroll.position) return;
+    console.log('onClick called', {
+      isInitialized: this.isInitialized,
+      isDragging: this.isDragging,
+      hasCallback: !!this.onItemClick,
+      hasItems: !!this.originalItems,
+      hasMedias: !!this.medias
+    });
+    
+    if (!this.isInitialized || this.isDragging) return;
     if (this.onItemClick && this.originalItems && this.medias && this.medias[0]) {
       const width = this.medias[0].width;
       const centerIndex = Math.round(Math.abs(this.scroll.current) / width);
       const itemIndex = centerIndex % this.originalItems.length;
       const item = this.originalItems[itemIndex];
+      console.log('Click detected on item:', { centerIndex, itemIndex, item });
       if (item && item.id) {
+        console.log('Navigating to event:', item.id, item.text);
         this.onItemClick(item.id);
       }
     }
