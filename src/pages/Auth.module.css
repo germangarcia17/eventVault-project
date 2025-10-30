@@ -150,6 +150,72 @@
   cursor: not-allowed;
 }
 
+/* Divider */
+.divider {
+  position: relative;
+  text-align: center;
+  margin: 1.5rem 0 1rem;
+}
+
+.divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, hsla(250, 65%, 60%, 0.3), transparent);
+}
+
+.dividerText {
+  position: relative;
+  display: inline-block;
+  padding: 0 1rem;
+  background: hsl(var(--background));
+  color: hsl(var(--muted-foreground));
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Google Button */
+.googleButton {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: hsl(var(--foreground));
+  background: linear-gradient(135deg, hsla(250, 30%, 12%, 0.5) 0%, hsla(0, 0%, 15%, 0.5) 100%);
+  backdrop-filter: blur(10px);
+  border: 2px solid hsla(250, 65%, 60%, 0.3);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.googleButton:hover:not(:disabled) {
+  background: linear-gradient(135deg, hsla(250, 40%, 18%, 0.7) 0%, hsla(0, 0%, 20%, 0.7) 100%);
+  border-color: hsl(250, 65%, 60%);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-accent);
+}
+
+.googleButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.googleIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+}
+
 @keyframes fadeInScale {
   from {
     opacity: 0;
