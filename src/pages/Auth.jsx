@@ -93,6 +93,7 @@ const Auth = () => {
                       value={signInEmail}
                       onChange={(e) => setSignInEmail(e.target.value)}
                       required
+                      autoComplete="email"
                       className={styles.input}
                     />
                   </div>
@@ -105,6 +106,7 @@ const Auth = () => {
                       value={signInPassword}
                       onChange={(e) => setSignInPassword(e.target.value)}
                       required
+                      autoComplete="current-password"
                       className={styles.input}
                     />
                   </div>
@@ -158,6 +160,7 @@ const Auth = () => {
                       value={signUpEmail}
                       onChange={(e) => setSignUpEmail(e.target.value)}
                       required
+                      autoComplete="email"
                       className={styles.input}
                     />
                   </div>
@@ -171,6 +174,7 @@ const Auth = () => {
                       onChange={(e) => setSignUpPassword(e.target.value)}
                       required
                       minLength={6}
+                      autoComplete="new-password"
                       className={styles.input}
                     />
                   </div>
