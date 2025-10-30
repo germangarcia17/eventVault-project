@@ -20,8 +20,8 @@
       style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
       font-src 'self' https://fonts.gstatic.com;
       img-src 'self' data: https: blob:;
-      connect-src 'self' https://*.supabase.co https://js.stripe.com https://api.stripe.com https://*.stripe.com https://www.google-analytics.com https://www.googletagmanager.com https://*.netlify.app;
-      frame-src 'self' https://js.stripe.com https://*.stripe.com;
+      connect-src 'self' https://*.supabase.co https://js.stripe.com https://api.stripe.com https://*.stripe.com https://www.google-analytics.com https://www.googletagmanager.com https://*.netlify.app https://*.netlify.com;
+      frame-src 'self' https://js.stripe.com https://*.stripe.com https://app.netlify.com;
     """
     Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
     X-Content-Type-Options = "nosniff"
