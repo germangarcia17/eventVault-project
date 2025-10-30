@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Calendar, ArrowRight, Sparkles, Zap } from 'lucide-react';
 import { EventCard } from '@/components/EventCard';
+import CircularGallery from '@/components/CircularGallery';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/hooks/useAuth';
 import { gsap } from 'gsap';
@@ -642,6 +643,37 @@ const Home = () => {
             </div>
           </section>
         )}
+
+        {/* Circular Gallery Section */}
+        <section className={`${styles.gallerySection} ${styles.fadeInSection} fade-in-section`}>
+          <div className={styles.gallerySectionHeader}>
+            <div className={styles.eventsSectionBadge}>
+              <Sparkles className={styles.eventsSectionBadgeIcon} />
+              <span className={styles.eventsSectionBadgeText}>Galería</span>
+            </div>
+            <h2 className={styles.eventsSectionTitle}>
+              Momentos <span className={styles.eventsSectionTitleGold}>Memorables</span>
+            </h2>
+            <p className={styles.eventsSectionSubtitle}>
+              Explora la experiencia EventVault en acción
+            </p>
+          </div>
+          
+          <div className={styles.galleryWrapper}>
+            <CircularGallery 
+              bend={2}
+              textColor="#d4af37"
+              borderRadius={0.08}
+              scrollSpeed={2.5}
+              scrollEase={0.06}
+            />
+          </div>
+        </section>
+
+        {/* Separator */}
+        <div className={styles.separator}>
+          <div className={styles.separatorLine} />
+        </div>
 
         {/* Final CTA Section - Grand finale */}
         <section className={`${styles.finalSection} ${styles.fadeInSection} fade-in-section`}>

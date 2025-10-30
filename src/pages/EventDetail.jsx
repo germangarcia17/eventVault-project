@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Calendar, MapPin, Tag, ArrowLeft, Users, Clock, Ticket } from 'lucide-react';
+import { Calendar, MapPin, Tag, ArrowLeft, Users, Clock, Ticket, Sparkles } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -8,6 +8,7 @@ import { gsap } from 'gsap';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from '@/hooks/use-toast';
 import { analytics } from '@/lib/analytics';
+import CircularGallery from '@/components/CircularGallery';
 import styles from './EventDetail.module.css';
 
 const EventDetail = () => {
@@ -18,6 +19,7 @@ const EventDetail = () => {
   const [loading, setLoading] = useState(false);
   const [loadingEvent, setLoadingEvent] = useState(true);
   const [hasReservation, setHasReservation] = useState(false);
+  const [relatedEvents, setRelatedEvents] = useState([]);
 
   const getCategoryClass = (category) => {
     const classes = {
@@ -33,6 +35,7 @@ const EventDetail = () => {
 
   useEffect(() => {
     fetchEvent();
+    fetchRelatedEvents();
     if (user) {
       checkExistingReservation();
     }
@@ -74,6 +77,25 @@ const EventDetail = () => {
       setEvent(null);
     } finally {
       setLoadingEvent(false);
+    }
+  };
+
+  const fetchRelatedEvents = async () => {
+    try {
+      // Obtener los 7 eventos más próximos a finalizar (fecha más antigua)
+      const { data, error } = await supabase
+        .from('events')
+        .select('*')
+        .neq('id', id) // Excluir el evento actual
+        .order('date', { ascending: true }) // Orden ascendente = fecha más antigua primero
+        .limit(7);
+
+      if (error) throw error;
+
+      setRelatedEvents(data || []);
+    } catch (error) {
+      console.error('Error fetching related events:', error);
+      setRelatedEvents([]);
     }
   };
 
@@ -306,6 +328,38 @@ const EventDetail = () => {
             </div>
           </div>
         </div>
+
+        {/* Galería de Eventos Relacionados */}
+        {relatedEvents.length > 0 && (
+          <div className={styles.relatedSection}>
+            <div className={styles.relatedHeader}>
+              <div className={styles.relatedBadge}>
+                <Sparkles className={styles.relatedBadgeIcon} />
+                <span>Próximos a Finalizar</span>
+              </div>
+              <h2 className={styles.relatedTitle}>
+                Otros <span className={styles.relatedTitleGold}>Eventos</span>
+              </h2>
+              <p className={styles.relatedSubtitle}>
+                No te pierdas estas experiencias que terminan pronto
+              </p>
+            </div>
+            
+            <div className={styles.galleryWrapper}>
+              <CircularGallery 
+                items={relatedEvents.map(evt => ({
+                  image: evt.image_url,
+                  text: evt.title
+                }))}
+                bend={2}
+                textColor="#d4af37"
+                borderRadius={0.08}
+                scrollSpeed={2.5}
+                scrollEase={0.06}
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
