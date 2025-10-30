@@ -195,7 +195,7 @@
 
 /* Estilos para las opciones del select */
 .selectOption {
-  background: linear-gradient(135deg, hsl(250, 30%, 12%) 0%, hsl(0, 0%, 10%) 100%);
+  background:  hsl(250, 30%, 12%);
   color: #fff;
   padding: 0.75rem 1rem;
   font-weight: 600;
@@ -205,7 +205,7 @@
 }
 
 .selectOption:hover {
-  background: linear-gradient(135deg, hsl(250, 40%, 18%) 0%, hsl(0, 0%, 15%) 100%);
+  background: hsl(250, 40%, 18%);
   color: hsl(45, 100%, 55%);
 }
 
