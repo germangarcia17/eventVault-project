@@ -661,11 +661,19 @@ const Home = () => {
           
           <div className={styles.galleryWrapper}>
             <CircularGallery 
+              items={events.slice(0, 7).map(evt => ({
+                id: evt.id,
+                image: evt.image_url,
+                text: evt.title
+              }))}
               bend={2}
               textColor="#d4af37"
               borderRadius={0.08}
               scrollSpeed={2.5}
               scrollEase={0.06}
+              onItemClick={(eventId) => {
+                window.location.href = `/event/${eventId}`;
+              }}
             />
           </div>
         </section>

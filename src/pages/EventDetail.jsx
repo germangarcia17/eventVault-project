@@ -348,6 +348,7 @@ const EventDetail = () => {
             <div className={styles.galleryWrapper}>
               <CircularGallery 
                 items={relatedEvents.map(evt => ({
+                  id: evt.id,
                   image: evt.image_url,
                   text: evt.title
                 }))}
@@ -356,6 +357,12 @@ const EventDetail = () => {
                 borderRadius={0.08}
                 scrollSpeed={2.5}
                 scrollEase={0.06}
+                onItemClick={(eventId) => {
+                  // Navegar al evento seleccionado
+                  navigate(`/event/${eventId}`);
+                  // Scroll suave hacia arriba
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
               />
             </div>
           </div>

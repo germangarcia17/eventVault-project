@@ -198,18 +198,20 @@ class Media {
 }
 
 class App {
-  constructor(container, { items, bend, textColor = '#d4af37', borderRadius = 0.05, font = 'bold 30px Figtree', scrollSpeed = 2, scrollEase = 0.05 } = {}) {
+  constructor(container, { items, bend, textColor = '#d4af37', borderRadius = 0.05, font = 'bold 30px Figtree', scrollSpeed = 2, scrollEase = 0.05, onItemClick } = {}) {
     document.documentElement.classList.remove('no-js');
     this.container = container;
     this.scrollSpeed = scrollSpeed;
     this.scroll = { ease: scrollEase, current: 0, target: 0, last: 0 };
     this.onCheckDebounce = debounce(this.onCheck, 200);
+    this.onItemClick = onItemClick;
     this.createRenderer();
     this.createCamera();
     this.createScene();
     this.onResize();
     this.createGeometry();
     this.createMedias(items, bend, textColor, borderRadius, font);
+    this.createOverlays(items);
     this.update();
     this.addEventListeners();
   }
@@ -266,6 +268,19 @@ class App {
     });
   }
 
+  createOverlays(items) {
+    const galleryItems = items && items.length ? items : [];
+    if (galleryItems.length === 0) return;
+
+    // Create overlay container
+    this.overlayContainer = document.createElement('div');
+    this.overlayContainer.className = 'circular-gallery-overlays';
+    this.container.appendChild(this.overlayContainer);
+
+    // Store original items (not duplicated)
+    this.originalItems = galleryItems;
+  }
+
   onTouchDown(e) {
     this.isDown = true;
     this.scroll.position = this.scroll.current;
@@ -282,6 +297,18 @@ class App {
   onTouchUp() {
     this.isDown = false;
     this.onCheck();
+  }
+
+  onClick(e) {
+    // Only trigger click if not dragging
+    if (this.scroll.current === this.scroll.position && this.onItemClick && this.originalItems) {
+      const centerIndex = Math.round(Math.abs(this.scroll.current) / (this.medias[0]?.width || 1));
+      const itemIndex = centerIndex % this.originalItems.length;
+      const item = this.originalItems[itemIndex];
+      if (item && item.id) {
+        this.onItemClick(item.id);
+      }
+    }
   }
 
   onWheel(e) {
@@ -328,6 +355,8 @@ class App {
     this.boundOnTouchDown = this.onTouchDown.bind(this);
     this.boundOnTouchMove = this.onTouchMove.bind(this);
     this.boundOnTouchUp = this.onTouchUp.bind(this);
+    this.boundOnClick = this.onClick.bind(this);
+    
     window.addEventListener('resize', this.boundOnResize);
     window.addEventListener('mousewheel', this.boundOnWheel);
     window.addEventListener('wheel', this.boundOnWheel);
@@ -337,6 +366,11 @@ class App {
     window.addEventListener('touchstart', this.boundOnTouchDown);
     window.addEventListener('touchmove', this.boundOnTouchMove);
     window.addEventListener('touchend', this.boundOnTouchUp);
+    
+    // Add click handler to container
+    if (this.container) {
+      this.container.addEventListener('click', this.boundOnClick);
+    }
   }
 
   destroy() {
@@ -352,6 +386,15 @@ class App {
     window.removeEventListener('touchstart', this.boundOnTouchDown);
     window.removeEventListener('touchmove', this.boundOnTouchMove);
     window.removeEventListener('touchend', this.boundOnTouchUp);
+    
+    if (this.container && this.boundOnClick) {
+      this.container.removeEventListener('click', this.boundOnClick);
+    }
+    
+    if (this.overlayContainer && this.overlayContainer.parentNode) {
+      this.overlayContainer.parentNode.removeChild(this.overlayContainer);
+    }
+    
     if (this.gl && this.gl.canvas && this.gl.canvas.parentNode) {
       this.gl.canvas.parentNode.removeChild(this.gl.canvas);
     }
@@ -365,16 +408,17 @@ export default function CircularGallery({
   borderRadius = 0.05,
   font = 'bold 30px Figtree',
   scrollSpeed = 2,
-  scrollEase = 0.05
+  scrollEase = 0.05,
+  onItemClick
 }) {
   const containerRef = useRef(null);
   useEffect(() => {
     if (!containerRef.current) return;
-    const app = new App(containerRef.current, { items, bend, textColor, borderRadius, font, scrollSpeed, scrollEase });
+    const app = new App(containerRef.current, { items, bend, textColor, borderRadius, font, scrollSpeed, scrollEase, onItemClick });
     return () => {
       app.destroy();
     };
-  }, [items, bend, textColor, borderRadius, font, scrollSpeed, scrollEase]);
+  }, [items, bend, textColor, borderRadius, font, scrollSpeed, scrollEase, onItemClick]);
   
   return <div className="circular-gallery" ref={containerRef} />;
 }
