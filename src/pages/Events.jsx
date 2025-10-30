@@ -118,13 +118,13 @@ const Events = () => {
                 }}
                 className={styles.select}
               >
-                <option value="all">Todas</option>
-                <option value="music">Música</option>
-                <option value="sports">Deportes</option>
-                <option value="arts">Arte</option>
-                <option value="tech">Tecnología</option>
-                <option value="food">Gastronomía</option>
-                <option value="workshop">Talleres</option>
+                <option className={styles.selectOption} value="all">Todas</option>
+                <option className={styles.selectOption} value="music">Música</option>
+                <option className={styles.selectOption} value="sports">Deportes</option>
+                <option className={styles.selectOption} value="arts">Arte</option>
+                <option className={styles.selectOption} value="tech">Tecnología</option>
+                <option className={styles.selectOption} value="food">Gastronomía</option>
+                <option className={styles.selectOption} value="workshop">Talleres</option>
               </select>
               <ChevronDown className={styles.selectArrow} />
             </div>
