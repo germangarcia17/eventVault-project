@@ -2,11 +2,16 @@ import { Link, useLocation } from 'react-router-dom';
 import { Calendar, LogOut, User, Ticket } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { analytics } from '@/lib/analytics';
+import { useState } from 'react';
 import styles from './Layout.module.css';
 
 export const Layout = ({ children }) => {
   const location = useLocation();
   const { user, signOut } = useAuth();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const toggleMenu = () => setMenuOpen(!menuOpen);
+  const closeMenu = () => setMenuOpen(false);
 
   // Check if user is admin using their email
   const isAdmin = user?.email === import.meta.env.VITE_SUPABASE_ADMIN_EMAIL;
@@ -17,7 +22,7 @@ export const Layout = ({ children }) => {
     <div className={styles.container}>
       <header className={styles.header}>
         <div className={styles.headerContainer}>
-          <Link to="/" className={styles.logo} state={{ fromInternal: true }}>
+          <Link to="/" className={styles.logo} state={{ fromInternal: true }} onClick={closeMenu}>
             <div className={styles.logoIconWrapper}>
               <Ticket className={styles.logoIcon} />
             </div>
@@ -26,19 +31,40 @@ export const Layout = ({ children }) => {
             </span>
           </Link>
 
-          <nav className={styles.nav}>
+          {/* Hamburger Button */}
+          <button 
+            className={`${styles.hamburger} ${menuOpen ? styles.hamburgerOpen : ''}`}
+            onClick={toggleMenu}
+            aria-label="Toggle menu"
+            aria-expanded={menuOpen}
+          >
+            <span className={styles.hamburgerLine}></span>
+            <span className={styles.hamburgerLine}></span>
+            <span className={styles.hamburgerLine}></span>
+          </button>
+
+          {/* Overlay for mobile menu */}
+          {menuOpen && <div className={styles.overlay} onClick={closeMenu}></div>}
+
+          <nav className={`${styles.nav} ${menuOpen ? styles.navOpen : ''}`}>
             <Link
               to="/"
               state={{ fromInternal: true }}
               className={`${styles.navLink} ${isActive('/') ? styles.navLinkActive : ''}`}
-              onClick={() => analytics.trackNavigation('Home')}
+              onClick={() => {
+                analytics.trackNavigation('Home');
+                closeMenu();
+              }}
             >
               Inicio
             </Link>
             <Link
               to="/events"
               className={`${styles.navLink} ${isActive('/events') ? styles.navLinkActive : ''}`}
-              onClick={() => analytics.trackNavigation('Events')}
+              onClick={() => {
+                analytics.trackNavigation('Events');
+                closeMenu();
+              }}
             >
               Eventos
             </Link>
@@ -47,7 +73,10 @@ export const Layout = ({ children }) => {
                 <Link
                   to="/dashboard"
                   className={`${styles.navLink} ${styles.navLinkHidden} ${isActive('/dashboard') ? styles.navLinkActive : ''}`}
-                  onClick={() => analytics.trackNavigation('Dashboard')}
+                  onClick={() => {
+                    analytics.trackNavigation('Dashboard');
+                    closeMenu();
+                  }}
                 >
                   Mis Reservas
                 </Link>
@@ -55,14 +84,20 @@ export const Layout = ({ children }) => {
                   <Link
                     to="/admin"
                     className={`${styles.navLink} ${isActive('/admin') ? styles.navLinkActive : ''}`}
-                    onClick={() => analytics.trackAdminAccess()}
+                    onClick={() => {
+                      analytics.trackAdminAccess();
+                      closeMenu();
+                    }}
                   >
                     Admin
                   </Link>
                 )}
                 <button 
                   className={styles.logoutButton}
-                  onClick={signOut}
+                  onClick={() => {
+                    signOut();
+                    closeMenu();
+                  }}
                 >
                   <LogOut className={styles.logoutIcon} />
                   <span className={styles.logoutText}>Salir</span>
@@ -72,7 +107,10 @@ export const Layout = ({ children }) => {
               <Link 
                 to="/auth" 
                 className={styles.loginButton}
-                onClick={() => analytics.trackNavigation('Auth/Login')}
+                onClick={() => {
+                  analytics.trackNavigation('Auth/Login');
+                  closeMenu();
+                }}
               >
                 <User className={styles.loginIcon} />
                 <span className={styles.loginTextFull}>Iniciar Sesión</span>
