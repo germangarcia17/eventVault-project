@@ -41,7 +41,8 @@
 }
 
 .logo:hover .logoIconWrapper {
-  box-shadow: var(--shadow-glow-strong);
+  box-shadow: var(--shadow-glow-hover);
+  transform: translateY(-2px);
 }
 
 .logoIcon {
@@ -165,7 +166,8 @@
 }
 
 .loginButton:hover {
-  box-shadow: var(--shadow-glow);
+  box-shadow: var(--shadow-glow-hover);
+  transform: translateY(-2px);
 }
 
 .loginIcon {

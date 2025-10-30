@@ -14,20 +14,20 @@ Inspired by thescotch.org - Bold, theatrical, high contrast design
   --popover: 0 0% 10%;
   --popover-foreground: 0 0% 98%;
 
-  /* Yellow/Gold primary color like thescotch.org */
+  /* Yellow/Gold primary color */
   --primary: 45 100% 55%;
   --primary-foreground: 0 0% 10%;
   --primary-glow: 45 100% 65%;
 
-  /* Red accent for urgency */
-  --secondary: 0 80% 55%;
+  /* Deep purple/indigo accent - complements gold beautifully */
+  --secondary: 250 65% 60%;
   --secondary-foreground: 0 0% 100%;
 
   --muted: 0 0% 20%;
   --muted-foreground: 0 0% 70%;
 
-  --accent: 45 100% 55%;
-  --accent-foreground: 0 0% 10%;
+  --accent: 250 65% 60%;
+  --accent-foreground: 0 0% 100%;
 
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 100%;
@@ -38,14 +38,19 @@ Inspired by thescotch.org - Bold, theatrical, high contrast design
 
   --radius: 0.5rem;
 
-  /* Dramatic gradients */
-  --gradient-hero: linear-gradient(135deg, hsl(0 0% 5%) 0%, hsl(0 0% 15%) 100%);
+  /* Refined gradients */
+  --gradient-hero: linear-gradient(135deg, hsl(0 0% 5%) 0%, hsl(250 20% 12%) 100%);
   --gradient-card: linear-gradient(180deg, hsl(0 0% 10%) 0%, hsl(0 0% 8%) 100%);
   --gradient-gold: linear-gradient(135deg, hsl(45 100% 55%) 0%, hsl(38 100% 50%) 100%);
-  --shadow-glow: 0 0 40px hsl(45 100% 55% / 0.5);
-  --shadow-glow-strong: 0 0 60px hsl(45 100% 55% / 0.7);
+  --gradient-accent: linear-gradient(135deg, hsl(250 65% 60%) 0%, hsl(260 60% 50%) 100%);
+  
+  /* REDUCED glow intensity - 50% less aggressive */
+  --shadow-glow: 0 0 20px hsl(45 100% 55% / 0.25);
+  --shadow-glow-hover: 0 0 30px hsl(45 100% 55% / 0.35);
+  --shadow-glow-strong: 0 0 40px hsl(45 100% 55% / 0.4);
   --shadow-card: 0 8px 32px hsl(0 0% 0% / 0.6);
   --shadow-text: 0 2px 10px hsl(0 0% 0% / 0.8);
+  --shadow-accent: 0 0 20px hsl(250 65% 60% / 0.3);
   
   --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
