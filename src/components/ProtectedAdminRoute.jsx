@@ -8,8 +8,8 @@ export const ProtectedAdminRoute = ({ children }) => {
   const navigate = useNavigate();
   const [isChecking, setIsChecking] = useState(true);
 
-  // Check if user is admin using their email
-  const isAdmin = user?.email === import.meta.env.VITE_SUPABASE_ADMIN_EMAIL;
+  // Check if user is admin using their UUID (more secure than email)
+  const isAdmin = user?.id === import.meta.env.VITE_SUPABASE_ADMIN_ID;
 
   useEffect(() => {
     if (!loading) {
