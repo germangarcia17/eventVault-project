@@ -30,6 +30,10 @@
   font-family: 'Bebas Neue', 'Anton', 'Oswald', sans-serif;
   letter-spacing: 0.05em;
   text-transform: uppercase;
+  background: var(--gradient-dual);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
 }
 
 .headerContent p {
@@ -63,12 +67,15 @@
 
 .tab:hover {
   color: hsl(var(--foreground));
-  background: hsla(var(--primary), 0.05);
+  background: linear-gradient(135deg, hsla(45, 100%, 55%, 0.05), hsla(250, 65%, 60%, 0.05));
 }
 
 .tabActive {
-  color: hsl(var(--primary));
-  border-bottom-color: hsl(var(--primary));
+  background: var(--gradient-dual);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  border-bottom-color: hsl(250, 65%, 60%);
 }
 
 .content {
@@ -113,8 +120,8 @@
 
 .searchInput:focus {
   outline: none;
-  border-color: hsl(var(--primary));
-  box-shadow: 0 0 0 3px hsla(var(--primary), 0.1);
+  border-color: hsl(250, 65%, 60%);
+  box-shadow: 0 0 0 3px hsla(250, 65%, 60%, 0.1), var(--shadow-accent);
 }
 
 .searchInput::placeholder {

@@ -10,8 +10,9 @@
   top: 0;
   z-index: 50;
   width: 100%;
-  border-bottom: 2px solid hsla(45, 100%, 55%, 0.2);
-  background-color: rgba(0, 0, 0, 0.95);
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(90deg, hsla(45, 100%, 55%, 0.3), hsla(250, 65%, 60%, 0.3), hsla(45, 100%, 55%, 0.3)) 1;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.98) 0%, rgba(0, 0, 0, 0.95) 100%);
   backdrop-filter: blur(20px);
 }
 
@@ -56,7 +57,7 @@
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  background: var(--gradient-gold);
+  background: var(--gradient-dual);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;

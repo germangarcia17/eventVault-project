@@ -155,13 +155,17 @@
 }
 
 .title {
-  font-size: 2.25rem;
-  font-weight: 700;
+  font-size: 2.5rem;
+  font-weight: 900;
   color: hsl(var(--foreground));
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   font-family: 'Bebas Neue', 'Anton', 'Oswald', sans-serif;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
+  background: var(--gradient-dual);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
 }
 
 .description {

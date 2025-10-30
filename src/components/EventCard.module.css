@@ -1,27 +1,46 @@
-/* EventCard Component Styles */
+/* EventCard Component Styles - Modern glassmorphism design */
 .card {
   position: relative;
   overflow: hidden;
-  border-radius: 0.75rem;
-  border: 2px solid hsla(45, 100%, 55%, 0.2);
-  background-color: hsl(0, 0%, 10%);
+  border-radius: 1rem;
+  background: linear-gradient(135deg, hsla(250, 20%, 15%, 0.6) 0%, hsla(0, 0%, 10%, 0.8) 100%);
+  backdrop-filter: blur(10px);
   box-shadow: var(--shadow-dramatic);
-  transition: all 0.3s;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Gradient border effect */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 1rem;
+  padding: 2px;
+  background: linear-gradient(135deg, hsla(45, 100%, 55%, 0.4), hsla(250, 65%, 60%, 0.4));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  opacity: 0.5;
+  transition: opacity 0.4s;
 }
 
 .card:hover {
-  border-color: hsla(45, 100%, 55%, 0.5);
-  box-shadow: var(--shadow-glow-hover), var(--shadow-card);
-  transform: translateY(-0.5rem);
+  transform: translateY(-0.75rem);
+  box-shadow: var(--shadow-dual), var(--shadow-card);
 }
 
-/* Hover glow effect */
+.card:hover::before {
+  opacity: 1;
+}
+
+/* Hover glow effect - Enhanced dual color */
 .hoverGlow {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom right, hsla(45, 100%, 55%, 0.05), transparent, transparent);
+  background: linear-gradient(135deg, hsla(45, 100%, 55%, 0.08), hsla(250, 65%, 60%, 0.08), transparent);
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: opacity 0.4s;
 }
 
 .card:hover .hoverGlow {
@@ -178,7 +197,8 @@
   align-items: center;
   justify-content: space-between;
   padding-top: 1.25rem;
-  border-top: 2px solid hsla(45, 100%, 55%, 0.2);
+  border-top: 1px solid transparent;
+  border-image: linear-gradient(90deg, transparent, hsla(250, 65%, 60%, 0.3), transparent) 1;
 }
 
 .price {
@@ -196,7 +216,10 @@
 .priceAmount {
   font-size: 1.875rem;
   font-weight: 900;
-  color: hsl(45, 100%, 55%);
+  background: var(--gradient-dual);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
 }
 
 .button {

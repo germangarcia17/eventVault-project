@@ -74,12 +74,27 @@
   font-weight: 900;
   letter-spacing: 0.1em;
   line-height: 1;
-  background: linear-gradient(135deg, #fff 0%, #d4af37 50%, #ffd700 100%);
+  background: linear-gradient(135deg, 
+    #fff 0%, 
+    #d4af37 30%, 
+    #9370DB 60%, 
+    #ffd700 100%
+  );
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 0 0 40px rgba(212, 175, 55, 0.3);
   margin-bottom: 2.5rem;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.2);
+  }
 }
 
 .coverTagline {
@@ -411,7 +426,7 @@
   background: linear-gradient(to top, hsl(0, 0%, 7%), transparent);
 }
 
-/* Separator Line */
+/* Separator Line - Dual gradient */
 .separator {
   position: relative;
   margin: 0 auto;
@@ -421,8 +436,9 @@
 
 .separatorLine {
   height: 0.25rem;
-  background: var(--gradient-gold);
-  box-shadow: var(--shadow-glow);
+  background: var(--gradient-dual);
+  box-shadow: var(--shadow-dual);
+  border-radius: 2px;
 }
 
 /* Upcoming Events Section */
@@ -440,8 +456,9 @@
   align-items: center;
   gap: 0.75rem;
   border-radius: 9999px;
-  border: 2px solid hsla(45, 100%, 55%, 0.3);
-  background-color: hsl(0, 0%, 10%);
+  border: 2px solid hsla(250, 65%, 60%, 0.4);
+  background: linear-gradient(135deg, hsla(250, 30%, 15%, 0.5), hsla(0, 0%, 10%, 0.5));
+  backdrop-filter: blur(10px);
   padding: 0.75rem 2rem;
   margin-bottom: 1.5rem;
 }
