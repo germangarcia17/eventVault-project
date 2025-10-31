@@ -406,13 +406,9 @@ const Home = () => {
     // Mark that user has seen the cover in this session
     sessionStorage.setItem('hasSeenCover', 'true');
     
-    // IMMEDIATELY show main content and enable scroll
-    setShowCover(false);
-    setCoverAnimationComplete(true);
-    
-    // Force enable scroll NOW
-    document.body.style.overflow = 'auto';
-    document.documentElement.style.overflow = 'auto';
+    // Force enable scroll IMMEDIATELY - this is the key
+    document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
     document.body.style.removeProperty('overflow');
     document.documentElement.style.removeProperty('overflow');
     
@@ -430,23 +426,28 @@ const Home = () => {
     setTimeout(() => {
       const timeline = gsap.timeline({
         onComplete: () => {
-          // Hide placeholder after animation
+          // NOW hide the cover and show content
+          setShowCover(false);
+          setCoverAnimationComplete(true);
           setShowPlaceholder(false);
         }
       });
       
       // Cover zoom out and fade out
-      timeline.to('.cover-page', {
-        scale: 1.5,
-        opacity: 0,
-        duration: 1,
-        ease: 'power2.in'
-      }, 0);
+      const coverElement = document.querySelector('.cover-page');
+      if (coverElement) {
+        timeline.to(coverElement, {
+          scale: 1.5,
+          opacity: 0,
+          duration: 1,
+          ease: 'power2.in'
+        }, 0);
+      }
       
       // Placeholder fade out
       const placeholderElement = document.querySelector('.content-placeholder');
       if (placeholderElement) {
-        timeline.to('.content-placeholder', {
+        timeline.to(placeholderElement, {
           opacity: 0,
           duration: 0.5,
           ease: 'power2.in'
@@ -455,11 +456,11 @@ const Home = () => {
       
       // Main content fade in
       timeline.to(
-        '.main-content',
+        mainContent,
         { opacity: 1, duration: 1, ease: 'power2.out' },
         0
       );
-    }, 50);
+    }, 10);
   };
 
   // Function to scroll to main content (triggers cover transition if cover is visible)
@@ -525,7 +526,8 @@ const Home = () => {
         ref={mainContentRef}
         className={`${styles.container} main-content`}
         style={{ 
-          display: showCover ? 'none' : 'block'
+          display: (showCover && !isTransitioningRef.current) ? 'none' : 'block',
+          opacity: (showCover && !isTransitioningRef.current) ? 0 : 1
         }}
       >
         <div className={styles.sectionSpacing}>
