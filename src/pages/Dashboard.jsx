@@ -5,7 +5,7 @@ import { Calendar, MapPin, Download, Ticket, CreditCard, Clock } from 'lucide-re
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/lib/supabase';
 import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
+import { enUS } from 'date-fns/locale';
 import { gsap } from 'gsap';
 import { analytics } from '@/lib/analytics';
 import styles from './Dashboard.module.css';
@@ -110,7 +110,7 @@ const Dashboard = () => {
   if (loading || loadingReservations) {
     return (
       <div className={styles.loading}>
-        <p className={styles.loadingText}>Cargando...</p>
+        <p className={styles.loadingText}>Loading...</p>
       </div>
     );
   }
@@ -119,9 +119,9 @@ const Dashboard = () => {
     <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.headerContent}>
-          <h1>Mi Dashboard</h1>
+          <h1>My Dashboard</h1>
           <p>
-            Gestiona tus reservas y entradas
+            Manage your reservations and tickets
           </p>
         </div>
         <Ticket className={styles.ticketIcon} />
@@ -134,7 +134,7 @@ const Dashboard = () => {
           onClick={() => setActiveTab('reservations')}
         >
           <Clock size={18} />
-          Reservas Pendientes
+          Pending Reservations
           {pendingReservations.length > 0 && (
             <span className={styles.tabBadge}>{pendingReservations.length}</span>
           )}
@@ -144,7 +144,7 @@ const Dashboard = () => {
           onClick={() => setActiveTab('payments')}
         >
           <CreditCard size={18} />
-          Pagadas
+          Payments
           {paidReservations.length > 0 && (
             <span className={styles.tabBadge}>{paidReservations.length}</span>
           )}
@@ -156,10 +156,10 @@ const Dashboard = () => {
           <div className={styles.emptyContent}>
             <Ticket className={styles.emptyIcon} />
             <p className={styles.emptyText}>
-              No tienes reservas todavía
+              You have no reservations yet
             </p>
             <button className={styles.exploreButton} onClick={() => navigate('/events')}>
-              Explorar Eventos
+              Explore Events
             </button>
           </div>
         </div>
@@ -173,10 +173,10 @@ const Dashboard = () => {
                   <div className={styles.emptyContent}>
                     <Clock className={styles.emptyIcon} />
                     <p className={styles.emptyText}>
-                      No tienes reservas pendientes
+                        You have no pending reservations
                     </p>
                     <button className={styles.exploreButton} onClick={() => navigate('/events')}>
-                      Explorar Eventos
+                      Explore Events
                     </button>
                   </div>
                 </div>
@@ -196,8 +196,8 @@ const Dashboard = () => {
                                 {reservation.event &&
                                   format(
                                     new Date(reservation.event.date),
-                                    "d 'de' MMMM, yyyy",
-                                    { locale: es }
+                                    "MMMM d, yyyy",
+                                    { locale: enUS }
                                   )}
                               </span>
                             </div>
@@ -208,13 +208,13 @@ const Dashboard = () => {
                           </div>
                         </div>
                         <span className={`${styles.badge} ${styles.badgePending}`}>
-                          Pendiente
+                          Pending
                         </span>
                       </div>
                     </div>
                     <div className={styles.cardContent}>
                       <div className={styles.priceSection}>
-                        <p className={styles.priceLabel}>Precio</p>
+                        <p className={styles.priceLabel}>Price</p>
                         <p className={styles.priceAmount}>${reservation.event?.price} USD</p>
                       </div>
                       <button
@@ -222,10 +222,10 @@ const Dashboard = () => {
                         onClick={() => handlePayment(reservation)}
                       >
                         <CreditCard />
-                        Proceder al Pago
+                        Proceed to Payment
                       </button>
                       <p className={styles.payNote}>
-                        Pago seguro con Stripe
+                        Secure payment with Stripe
                       </p>
                     </div>
                   </div>
@@ -242,10 +242,10 @@ const Dashboard = () => {
                   <div className={styles.emptyContent}>
                     <CreditCard className={styles.emptyIcon} />
                     <p className={styles.emptyText}>
-                      No tienes entradas pagadas aún
+                      You have no paid tickets yet
                     </p>
                     <button className={styles.exploreButton} onClick={() => setActiveTab('reservations')}>
-                      Ver Reservas Pendientes
+                      View Pending Reservations
                     </button>
                   </div>
                 </div>
@@ -265,8 +265,8 @@ const Dashboard = () => {
                                 {reservation.event &&
                                   format(
                                     new Date(reservation.event.date),
-                                    "d 'de' MMMM, yyyy",
-                                    { locale: es }
+                                    "MMMM d, yyyy",
+                                    { locale: enUS }
                                   )}
                               </span>
                             </div>
@@ -277,14 +277,14 @@ const Dashboard = () => {
                           </div>
                         </div>
                         <span className={`${styles.badge} ${styles.badgePaid}`}>
-                          Pagado
+                          Payment done
                         </span>
                       </div>
                     </div>
                     <div className={styles.cardContent}>
                       <div className={styles.qrSection}>
                         <p className={styles.qrLabel}>
-                          Tu código QR de entrada
+                          Your Ticket QR Code
                         </p>
                         <div className={styles.qrWrapper}>
                           <QRCodeSVG
@@ -296,7 +296,7 @@ const Dashboard = () => {
                           />
                         </div>
                         <p className={styles.qrNote}>
-                          Muestra este código en el evento
+                          Show this QR code at the event entrance
                         </p>
                       </div>
                       <button
@@ -306,7 +306,7 @@ const Dashboard = () => {
                         }
                       >
                         <Download />
-                        Descargar QR
+                        Download QR
                       </button>
                     </div>
                   </div>

@@ -101,10 +101,10 @@ const EventDetail = () => {
 
   const handleReserve = async () => {
     if (!user) {
-      analytics.trackCTAClick('Reservar (Not Logged In)', event.title);
+      analytics.trackCTAClick('Reserve (Not Logged In)', event.title);
       toast({
-        title: 'Inicia sesión',
-        description: 'Debes iniciar sesión para reservar',
+        title: 'Sign in',
+        description: 'You must sign in to make a reservation',
         variant: 'destructive',
       });
       navigate('/auth');
@@ -113,8 +113,8 @@ const EventDetail = () => {
 
     if (hasReservation) {
       toast({
-        title: 'Ya tienes una reserva',
-        description: 'Ya has reservado este evento',
+        title: 'You already have a reservation',
+        description: 'You have already reserved this event',
         variant: 'destructive',
       });
       navigate('/dashboard');
@@ -175,7 +175,7 @@ const EventDetail = () => {
   if (loadingEvent) {
     return (
       <div className={styles.loading}>
-        <p className={styles.loadingText}>Cargando evento...</p>
+        <p className={styles.loadingText}>Loading event...</p>
       </div>
     );
   }
@@ -183,13 +183,13 @@ const EventDetail = () => {
   if (!event) {
     return (
       <div className={styles.notFound}>
-        <p className={styles.notFoundText}>Evento no encontrado</p>
+        <p className={styles.notFoundText}>Event not found</p>
         <button 
           onClick={() => navigate('/events')} 
           className={styles.backButton}
         >
           <ArrowLeft />
-          Ver todos los eventos
+          Browse all events
         </button>
       </div>
     );
@@ -203,7 +203,7 @@ const EventDetail = () => {
           className={styles.backButton}
         >
           <ArrowLeft />
-          Volver a eventos
+          Back to events
         </button>
 
         <div className={styles.grid}>
@@ -239,13 +239,13 @@ const EventDetail = () => {
             <div className={styles.infoCard}>
               <h3 className={styles.infoCardTitle}>
                 <Ticket size={20} />
-                Detalles del Evento
+                Event Details
               </h3>
               
               <div className={styles.infoItem}>
                 <Calendar className={styles.infoIcon} />
                 <div className={styles.infoContent}>
-                  <p className={styles.infoLabel}>Fecha y hora</p>
+                  <p className={styles.infoLabel}>Date and Time</p>
                   <p className={styles.infoValue}>
                     {format(new Date(event.date), "EEEE, d 'de' MMMM, yyyy", { locale: es })}
                   </p>
@@ -258,7 +258,7 @@ const EventDetail = () => {
               <div className={styles.infoItem}>
                 <MapPin className={styles.infoIcon} />
                 <div className={styles.infoContent}>
-                  <p className={styles.infoLabel}>Ubicación</p>
+                  <p className={styles.infoLabel}>Location</p>
                   <p className={styles.infoValue}>{event.location}</p>
                 </div>
               </div>
@@ -266,7 +266,7 @@ const EventDetail = () => {
               <div className={styles.infoItem}>
                 <Tag className={styles.infoIcon} />
                 <div className={styles.infoContent}>
-                  <p className={styles.infoLabel}>Precio por entrada</p>
+                  <p className={styles.infoLabel}>Ticket Price</p>
                   <p className={styles.price}>${event.price} USD</p>
                 </div>
               </div>
@@ -279,13 +279,13 @@ const EventDetail = () => {
                     className={`${styles.reserveButton} ${styles.reserveButtonDisabled}`}
                     disabled
                   >
-                    Ya tienes una reserva
+                    You already have a reservation
                   </button>
                   <button
                     className={styles.viewReservationButton}
                     onClick={() => navigate('/dashboard')}
                   >
-                    Ver mis reservas
+                    View my reservations
                   </button>
                 </>
               ) : (
@@ -295,11 +295,11 @@ const EventDetail = () => {
                     onClick={handleReserve}
                     disabled={loading}
                   >
-                    {loading ? 'Procesando...' : 'Reservar Entrada'}
+                    {loading ? 'Processing...' : 'Reserve Ticket'}
                   </button>
                   <p className={styles.secureNote}>
                     <Users />
-                    Pago seguro con Stripe
+                    Secure payment with Stripe
                   </p>
                 </>
               )}

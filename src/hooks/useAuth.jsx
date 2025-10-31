@@ -33,12 +33,12 @@ export const AuthProvider = ({ children }) => {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
       analytics.trackLogin('email');
-      toast({ title: '¡Bienvenido!', description: 'Has iniciado sesión correctamente.' });
+      toast({ title: 'Welcome!', description: 'You have successfully signed in.' });
       navigate('/dashboard');
     } catch (error) {
       toast({
         title: 'Error',
-        description: error.message || 'No se pudo iniciar sesión',
+        description: error.message || 'Could not sign in',
         variant: 'destructive',
       });
     }
@@ -57,13 +57,13 @@ export const AuthProvider = ({ children }) => {
       if (error) throw error;
       analytics.trackSignup('email');
       toast({
-        title: 'Cuenta creada',
-        description: 'Revisa tu email para confirmar tu cuenta.',
+        title: 'Account Created',
+        description: 'Check your email to confirm your account.',
       });
     } catch (error) {
       toast({
         title: 'Error',
-        description: error.message || 'No se pudo crear la cuenta',
+        description: error.message || 'Could not create account',
         variant: 'destructive',
       });
     }
@@ -73,12 +73,12 @@ export const AuthProvider = ({ children }) => {
     try {
       await supabase.auth.signOut();
       analytics.trackLogout();
-      toast({ title: 'Sesión cerrada', description: 'Has cerrado sesión correctamente.' });
+      toast({ title: 'Signed Out', description: 'You have successfully signed out.' });
       navigate('/', { state: { fromInternal: true } });
     } catch (error) {
       toast({
         title: 'Error',
-        description: error.message || 'No se pudo cerrar sesión',
+        description: error.message || 'Could not sign out',
         variant: 'destructive',
       });
     }
@@ -97,7 +97,7 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       toast({
         title: 'Error',
-        description: error.message || 'No se pudo iniciar sesión con Google',
+        description: error.message || 'Could not sign in with Google',
         variant: 'destructive',
       });
     }

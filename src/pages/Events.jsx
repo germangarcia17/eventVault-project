@@ -78,13 +78,13 @@ const Events = () => {
         />
         <div className={`${styles.heroContent} hero-content`}>
           <h1 className={styles.heroTitle}>
-            Descubre Eventos Increíbles
+            Discover Amazing Live Events Near You
           </h1>
           <p className={styles.heroDescription}>
-            Encuentra y reserva entradas para los mejores conciertos, deportes, arte y más
+            Find and book tickets for the best concerts, sports, art, and more
           </p>
           <button className={styles.heroButton}>
-            Explorar Eventos
+            Explore Events
           </button>
         </div>
       </section>
@@ -96,7 +96,7 @@ const Events = () => {
             <Search className={styles.searchIcon} />
             <input
               type="text"
-              placeholder="Buscar eventos..."
+              placeholder="Search events..."
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
@@ -118,13 +118,13 @@ const Events = () => {
                 }}
                 className={styles.select}
               >
-                <option className={styles.selectOption} value="all">Todas</option>
-                <option className={styles.selectOption} value="music">Música</option>
-                <option className={styles.selectOption} value="sports">Deportes</option>
-                <option className={styles.selectOption} value="arts">Arte</option>
-                <option className={styles.selectOption} value="tech">Tecnología</option>
-                <option className={styles.selectOption} value="food">Gastronomía</option>
-                <option className={styles.selectOption} value="workshop">Talleres</option>
+                <option className={styles.selectOption} value="all">All</option>
+                <option className={styles.selectOption} value="music">Music</option>
+                <option className={styles.selectOption} value="sports">Sports</option>
+                <option className={styles.selectOption} value="arts">Art</option>
+                <option className={styles.selectOption} value="tech">Technology</option>
+                <option className={styles.selectOption} value="food">Gastronomy</option>
+                <option className={styles.selectOption} value="workshop">Workshops</option>
               </select>
               <ChevronDown className={styles.selectArrow} />
             </div>
@@ -132,7 +132,7 @@ const Events = () => {
         </div>
 
         <p className={styles.resultsCount}>
-          {filteredEvents.length} evento{filteredEvents.length !== 1 ? 's' : ''} encontrado{filteredEvents.length !== 1 ? 's' : ''}
+          {filteredEvents.length} event{filteredEvents.length !== 1 ? 's' : ''} found
         </p>
       </section>
 
@@ -140,7 +140,7 @@ const Events = () => {
       <section className={styles.eventsGrid}>
         {loading ? (
           <div className={styles.loadingState}>
-            <p>Cargando eventos...</p>
+            <p>Loading events...</p>
           </div>
         ) : (
           filteredEvents.map((event) => (
@@ -154,7 +154,7 @@ const Events = () => {
       {!loading && filteredEvents.length === 0 && (
         <div className={styles.emptyState}>
           <p className={styles.emptyStateText}>
-            No se encontraron eventos con esos criterios
+            We couldn't find any events matching your criteria. Please try adjusting your search or filters.
           </p>
         </div>
       )}

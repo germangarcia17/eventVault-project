@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Calendar, MapPin, Tag } from 'lucide-react';
 import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
+import { enUS } from 'date-fns/locale';
 import styles from './EventCard.module.css';
 
 const categoryStyles = {
@@ -44,7 +44,7 @@ export const EventCard = ({ event }) => {
           <div className={styles.detailRow}>
             <Calendar className={styles.detailIcon} />
             <span className={styles.detailText}>
-              {format(new Date(event.date), "d 'de' MMMM, yyyy", { locale: es })}
+              {format(new Date(event.date), "MMMM d, yyyy", { locale: enUS })}
             </span>
           </div>
           <div className={styles.detailRow}>
@@ -59,7 +59,7 @@ export const EventCard = ({ event }) => {
             <span className={styles.priceAmount}>${event.price}</span>
           </div>
           <Link to={`/event/${event.id}`} className={styles.button}>
-            Ver Más
+            Browse more
           </Link>
         </div>
       </div>

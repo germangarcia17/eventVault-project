@@ -56,7 +56,7 @@ export const Layout = ({ children }) => {
                 closeMenu();
               }}
             >
-              Inicio
+              Home
             </Link>
             <Link
               to="/events"
@@ -66,7 +66,7 @@ export const Layout = ({ children }) => {
                 closeMenu();
               }}
             >
-              Eventos
+              Events
             </Link>
             {user ? (
               <>
@@ -78,7 +78,7 @@ export const Layout = ({ children }) => {
                     closeMenu();
                   }}
                 >
-                  Mis Reservas
+                  My Reservations
                 </Link>
                 {isAdmin && (
                   <Link
@@ -100,7 +100,7 @@ export const Layout = ({ children }) => {
                   }}
                 >
                   <LogOut className={styles.logoutIcon} />
-                  <span className={styles.logoutText}>Salir</span>
+                  <span className={styles.logoutText}>Sign Out</span>
                 </button>
               </>
             ) : (
@@ -113,7 +113,7 @@ export const Layout = ({ children }) => {
                 }}
               >
                 <User className={styles.loginIcon} />
-                <span className={styles.loginTextFull}>Iniciar Sesión</span>
+                <span className={styles.loginTextFull}>Sign In</span>
                 <span className={styles.loginTextShort}>Login</span>
               </Link>
             )}
@@ -138,21 +138,21 @@ export const Layout = ({ children }) => {
                 </span>
               </div>
               <p className={styles.footerDescription}>
-                Las mejores experiencias en vivo
+                The best live experiences
               </p>
             </div>
             
             <div className={styles.footerSection}>
-              <h3 className={styles.footerTitle}>Enlaces Rápidos</h3>
+              <h3 className={styles.footerTitle}>Quick Links</h3>
               <ul className={styles.footerLinks}>
-                <li><Link to="/" state={{ fromInternal: true }} className={styles.footerLink}>Inicio</Link></li>
-                <li><Link to="/events" className={styles.footerLink}>Eventos</Link></li>
-                <li><Link to="/auth" className={styles.footerLink}>Iniciar Sesión</Link></li>
+                <li><Link to="/" state={{ fromInternal: true }} className={styles.footerLink}>Home</Link></li>
+                <li><Link to="/events" className={styles.footerLink}>Events</Link></li>
+                <li><Link to="/auth" className={styles.footerLink}>Sign In</Link></li>
               </ul>
             </div>
             
             <div className={styles.footerSection}>
-              <h3 className={styles.footerTitle}>Contacto</h3>
+              <h3 className={styles.footerTitle}>Contact</h3>
               <p className={styles.footerContact}>
                 © 2025 EventVault
                 <br />
@@ -163,7 +163,7 @@ export const Layout = ({ children }) => {
           
           <div className={styles.footerBottom}>
             <p className={styles.footerCopyright}>
-              Built with React • TypeScript • TailwindCSS • Supabase
+              Built with React, Javascript, CSS, Supabase, hope you enjoy my page as much as I did building it!
             </p>
           </div>
         </div>

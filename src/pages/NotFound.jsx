@@ -27,16 +27,16 @@ const NotFound = () => {
           </div>
           <h1 className={styles.errorCode}>404</h1>
           <p className={styles.description}>
-            Lo sentimos, esta página no existe
+            We can't seem to find the page you're looking for.
           </p>
         </div>
         <div className={styles.cardContent}>
           <p className={styles.message}>
-            La página que buscas no se encuentra disponible o ha sido movida.
+            The page you're looking for is not available or has been moved.
           </p>
           <button className={styles.button} onClick={() => navigate('/', { state: { fromInternal: true } })}>
             <Home />
-            Volver al Inicio
+            Back to Home
           </button>
         </div>
       </div>
