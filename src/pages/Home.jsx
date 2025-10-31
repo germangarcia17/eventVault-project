@@ -392,9 +392,11 @@ const Home = () => {
     // Mark that user has seen the cover in this session
     sessionStorage.setItem('hasSeenCover', 'true');
     
-    // Force enable scrolling immediately
-    document.body.style.overflow = 'auto';
-    document.documentElement.style.overflow = 'auto';
+    // Force enable scrolling immediately - must set overflow-y explicitly because CSS has overflow-x: hidden
+    document.body.style.overflowX = 'hidden';
+    document.body.style.overflowY = 'auto';
+    document.documentElement.style.overflowX = 'hidden';
+    document.documentElement.style.overflowY = 'auto';
     
     // Show placeholder for smooth transition
     setShowPlaceholder(true);
@@ -415,11 +417,11 @@ const Home = () => {
           console.log('Window height:', window.innerHeight);
           console.log('Can scroll:', document.body.scrollHeight > window.innerHeight);
           
-          // Force scroll to be enabled
-          document.body.style.overflow = '';
-          document.documentElement.style.overflow = '';
-          document.body.style.height = '';
-          document.documentElement.style.height = '';
+          // Force scroll to be enabled - must set overflow-y explicitly because CSS has overflow-x: hidden
+          document.body.style.overflowX = 'hidden';
+          document.body.style.overflowY = 'auto';
+          document.documentElement.style.overflowX = 'hidden';
+          document.documentElement.style.overflowY = 'auto';
           
           // Kill all GSAP tweens that might be blocking
           gsap.killTweensOf('.main-content');
