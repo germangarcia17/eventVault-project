@@ -363,7 +363,6 @@ const Home = () => {
 
       // Cleanup function for event listeners
       const cleanupListeners = () => {
-        console.log('Cleaning up scroll listeners');
         window.removeEventListener('wheel', handleWheel);
         window.removeEventListener('touchstart', handleTouchStart);
         window.removeEventListener('touchmove', handleTouchMove);
@@ -401,9 +400,6 @@ const Home = () => {
 
   // Function to trigger the cover transition
   const triggerCoverTransition = () => {
-    console.log('=== Starting cover transition ===');
-    console.log('Overflow before:', document.body.style.overflow);
-    
     // Mark that we're transitioning
     isTransitioningRef.current = true;
     
@@ -416,21 +412,26 @@ const Home = () => {
     document.body.style.removeProperty('overflow');
     document.documentElement.style.removeProperty('overflow');
     
-    console.log('Overflow after:', document.body.style.overflow);
-    console.log('Can scroll now? Body height:', document.body.scrollHeight, 'Window height:', window.innerHeight);
-    
-    // Show main content immediately with opacity 0
+    // Show main content immediately WITHOUT opacity 0 so browser calculates height
     const mainContent = document.querySelector('.main-content');
     if (mainContent) {
       mainContent.style.display = 'block';
-      gsap.set(mainContent, { opacity: 0 });
+      // Don't set opacity to 0 - let it be visible so body height is calculated
     }
+    
+    // Force browser to recalculate layout
+    void document.body.offsetHeight;
     
     // Show placeholder for smooth transition
     setShowPlaceholder(true);
     
-    // Start animation immediately
-    setTimeout(() => {
+    // Start animation after a very brief delay to ensure DOM is updated
+    requestAnimationFrame(() => {
+      // NOW set opacity to 0 for animation
+      if (mainContent) {
+        gsap.set(mainContent, { opacity: 0 });
+      }
+      
       const timeline = gsap.timeline({
         onComplete: () => {
           // NOW hide the cover and show content
@@ -462,12 +463,14 @@ const Home = () => {
       }
       
       // Main content fade in
-      timeline.to(
-        mainContent,
-        { opacity: 1, duration: 1, ease: 'power2.out' },
-        0
-      );
-    }, 10);
+      if (mainContent) {
+        timeline.to(
+          mainContent,
+          { opacity: 1, duration: 1, ease: 'power2.out' },
+          0
+        );
+      }
+    });
   };
 
   // Function to scroll to main content (triggers cover transition if cover is visible)
@@ -475,7 +478,6 @@ const Home = () => {
     if (showCover) {
       // Clean up event listeners before triggering transition
       if (window.__coverCleanup) {
-        console.log('Cleaning up listeners from click');
         window.__coverCleanup();
         delete window.__coverCleanup;
       }
@@ -483,7 +485,6 @@ const Home = () => {
       triggerCoverTransition();
     } else if (mainContentRef.current) {
       // Otherwise, just scroll to content
-      console.log('Scrolling to content');
       mainContentRef.current.scrollIntoView({ 
         behavior: 'smooth',
         block: 'start'
@@ -535,8 +536,7 @@ const Home = () => {
         ref={mainContentRef}
         className={`${styles.container} main-content`}
         style={{ 
-          display: (showCover && !isTransitioningRef.current) ? 'none' : 'block',
-          opacity: (showCover && !isTransitioningRef.current) ? 0 : 1
+          display: (showCover && !isTransitioningRef.current) ? 'none' : 'block'
         }}
       >
         <div className={styles.sectionSpacing}>
