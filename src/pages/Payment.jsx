@@ -53,7 +53,7 @@ function CheckoutForm({ reservation, event, onSuccess }) {
         setError(err.message);
         toast({
           title: 'Error',
-          description: 'No se pudo inicializar el pago. Por favor, intenta de nuevo.',
+          description: 'Could not initialize payment. Please try again.',
           variant: 'destructive',
         });
       }
@@ -87,26 +87,26 @@ function CheckoutForm({ reservation, event, onSuccess }) {
 
       if (stripeError) {
         // Handle different types of Stripe errors
-        let errorMessage = 'No se pudo procesar el pago.';
+        let errorMessage = 'Could not process payment.';
         
         switch (stripeError.code) {
           case 'card_declined':
-            errorMessage = 'Tu tarjeta fue rechazada. Por favor, intenta con otra tarjeta.';
+            errorMessage = 'Your card was declined. Please try another card.';
             break;
           case 'insufficient_funds':
-            errorMessage = 'Fondos insuficientes en la tarjeta.';
+            errorMessage = 'Insufficient funds on the card.';
             break;
           case 'expired_card':
-            errorMessage = 'Tu tarjeta ha expirado.';
+            errorMessage = 'Your card has expired.';
             break;
           case 'incorrect_cvc':
-            errorMessage = 'El código CVC es incorrecto.';
+            errorMessage = 'The CVC code is incorrect.';
             break;
           case 'processing_error':
-            errorMessage = 'Error al procesar el pago. Por favor, intenta de nuevo.';
+            errorMessage = 'Error processing payment. Please try again.';
             break;
           case 'incorrect_number':
-            errorMessage = 'El número de tarjeta es incorrecto.';
+            errorMessage = 'The card number is incorrect.';
             break;
           default:
             errorMessage = stripeError.message || errorMessage;
@@ -166,7 +166,7 @@ function CheckoutForm({ reservation, event, onSuccess }) {
     return (
       <div className={styles.loadingPayment}>
         <div className={styles.spinner} />
-        <p>Preparando pasarela de pago...</p>
+        <p>Loading payment...</p>
       </div>
     );
   }
@@ -176,7 +176,7 @@ function CheckoutForm({ reservation, event, onSuccess }) {
     return (
       <div className={styles.errorPayment}>
         <AlertCircle className={styles.errorIcon} />
-        <p>Error al inicializar el pago</p>
+        <p>Error initializing payment</p>
         <p className={styles.errorMessage}>{error}</p>
       </div>
     );
@@ -227,19 +227,19 @@ function CheckoutForm({ reservation, event, onSuccess }) {
         {processing ? (
           <>
             <div className={styles.spinner} />
-            Procesando...
+            Loading...
           </>
         ) : (
           <>
             <Lock size={20} />
-            Pagar €{event.price.toFixed(2)}
+            Pay €{event.price.toFixed(2)}
           </>
         )}
       </button>
 
       <p className={styles.secureNote}>
         <Lock size={16} />
-        Pago seguro procesado por Stripe
+        Secure payment processed by Stripe
       </p>
     </form>
   );
@@ -288,7 +288,7 @@ export default function Payment() {
   if (loading) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>Cargando...</div>
+        <div className={styles.loading}>Loading...</div>
       </div>
     );
   }
@@ -298,13 +298,13 @@ export default function Payment() {
       <div className={styles.content}>
         <button onClick={() => navigate('/dashboard')} className={styles.backButton}>
           <ArrowLeft size={20} />
-          Volver al Dashboard
+          Back to Dashboard
         </button>
 
         <div className={styles.header}>
           <CreditCard size={48} className={styles.headerIcon} />
-          <h1>Completa tu Pago</h1>
-          <p>Confirma tu reserva para {event.title}</p>
+          <h1>Complete Your Payment</h1>
+          <p>Confirm your reservation for {event.title}</p>
         </div>
 
         <div className={styles.paymentCard}>
@@ -332,11 +332,11 @@ export default function Payment() {
 
           <div className={styles.priceSummary}>
             <div className={styles.priceRow}>
-              <span>Entrada</span>
+              <span>Ticket</span>
               <span>€{event.price.toFixed(2)}</span>
             </div>
             <div className={styles.priceRow}>
-              <span>Comisión de servicio</span>
+              <span>Service Fee</span>
               <span>€0.00</span>
             </div>
             <div className={styles.totalRow}>
@@ -346,7 +346,7 @@ export default function Payment() {
           </div>
 
           <div className={styles.paymentSection}>
-            <h2>Información de Pago</h2>
+            <h2>Payment Information</h2>
             <Elements stripe={stripePromise}>
               <CheckoutForm
                 reservation={reservation}

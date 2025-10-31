@@ -22,21 +22,21 @@ const Cancel = () => {
           <div className={styles.iconWrapper}>
             <XCircle className={styles.icon} />
           </div>
-          <h1 className={styles.title}>Pago Cancelado</h1>
+          <h1 className={styles.title}>Payment Cancelled</h1>
           <p className={styles.description}>
-            Tu reserva no se ha completado
+            Your reservation has not been completed
           </p>
         </div>
         <div className={styles.cardContent}>
           <p className={styles.message}>
-            No se realizó ningún cargo. Puedes intentar reservar nuevamente cuando estés listo.
+            No charge was made. You can try to reserve again when you are ready.
           </p>
           <div className={styles.actions}>
             <button className={styles.button} onClick={() => navigate(-1)}>
-              Volver al Evento
+              Back to Event
             </button>
             <button className={`${styles.button} ${styles.buttonOutline}`} onClick={() => navigate('/', { state: { fromInternal: true } })}>
-              Ver Todos los Eventos
+              View All Events
             </button>
           </div>
         </div>

@@ -169,7 +169,7 @@ const AdminEvents = () => {
           <Search size={18} className={styles.searchIcon} />
           <input
             type="text"
-            placeholder="Buscar eventos por nombre, descripción o ubicación..."
+            placeholder="Search events by name, description or location..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className={styles.searchInput}
@@ -193,7 +193,7 @@ const AdminEvents = () => {
           }}
         >
           <Plus size={20} />
-          {showForm ? 'Cancelar' : 'Nuevo Evento'}
+          {showForm ? 'Cancel' : 'New Event'}
         </button>
       </div>
 
@@ -205,7 +205,7 @@ const AdminEvents = () => {
 
       {showForm && (
         <div className={styles.formContainer} ref={formRef}>
-          <h3>Crear Nuevo Evento</h3>
+          <h3>Create new event</h3>
           <form onSubmit={handleSubmit} className={styles.eventForm}>
             <div className={styles.formGroup}>
               <label htmlFor="title" className={styles.label}>Título</label>
@@ -253,7 +253,7 @@ const AdminEvents = () => {
               </div>
 
               <div className={styles.formGroup}>
-                <label htmlFor="price" className={styles.label}>Precio (€)</label>
+                <label htmlFor="price" className={styles.label}>Price ($)</label>
                 <input
                   id="price"
                   type="number"
@@ -269,7 +269,7 @@ const AdminEvents = () => {
 
             <div className={styles.formRow}>
               <div className={styles.formGroup}>
-                <label htmlFor="date" className={styles.label}>Fecha y Hora</label>
+                <label htmlFor="date" className={styles.label}>Date and Time</label>
                 <input
                   id="date"
                   type="datetime-local"
@@ -281,7 +281,7 @@ const AdminEvents = () => {
               </div>
 
               <div className={styles.formGroup}>
-                <label htmlFor="location" className={styles.label}>Ubicación</label>
+                <label htmlFor="location" className={styles.label}>Location</label>
                 <input
                   id="location"
                   type="text"
@@ -315,7 +315,7 @@ const AdminEvents = () => {
                 onClick={resetForm}
                 className={styles.cancelButton}
               >
-                Cancelar
+                Cancel
               </button>
             </div>
           </form>
@@ -351,18 +351,18 @@ const AdminEvents = () => {
                   <p className={styles.eventDescription}>{event.description}</p>
                   <div className={styles.eventDetails}>
                     <div className={styles.eventDetail}>
-                      <span className={styles.detailLabel}>Fecha:</span>
+                      <span className={styles.detailLabel}>Date:</span>
                       <span>{new Date(event.date).toLocaleString('es-ES', {
                         dateStyle: 'short',
                         timeStyle: 'short'
                       })}</span>
                     </div>
                     <div className={styles.eventDetail}>
-                      <span className={styles.detailLabel}>Ubicación:</span>
+                      <span className={styles.detailLabel}>Location:</span>
                       <span>{event.location}</span>
                     </div>
                     <div className={styles.eventDetail}>
-                      <span className={styles.detailLabel}>Precio:</span>
+                      <span className={styles.detailLabel}>Price:</span>
                       <span className={styles.eventPrice}>{event.price}€</span>
                     </div>
                   </div>
@@ -436,7 +436,7 @@ const AdminEvents = () => {
                       </div>
 
                       <div className={styles.formGroup}>
-                        <label htmlFor={`price-${event.id}`} className={styles.label}>Precio (€)</label>
+                        <label htmlFor={`price-${event.id}`} className={styles.label}>Price ($)</label>
                         <input
                           id={`price-${event.id}`}
                           type="number"
@@ -452,7 +452,7 @@ const AdminEvents = () => {
 
                     <div className={styles.formRow}>
                       <div className={styles.formGroup}>
-                        <label htmlFor={`date-${event.id}`} className={styles.label}>Fecha y Hora</label>
+                        <label htmlFor={`date-${event.id}`} className={styles.label}>Date and Time</label>
                         <input
                           id={`date-${event.id}`}
                           type="datetime-local"
@@ -464,7 +464,7 @@ const AdminEvents = () => {
                       </div>
 
                       <div className={styles.formGroup}>
-                        <label htmlFor={`location-${event.id}`} className={styles.label}>Ubicación</label>
+                        <label htmlFor={`location-${event.id}`} className={styles.label}>Location</label>
                         <input
                           id={`location-${event.id}`}
                           type="text"

@@ -438,14 +438,14 @@ const Home = () => {
               </h1>
               
               <p className={`${styles.coverTagline} cover-tagline`}>
-                Descubre experiencias inolvidables,
+                Moments that last a lifetime,
               </p>
               <p className={`${styles.coverTagline} cover-tagline`}>
-                Reserva momentos extraordinarios
+                Reserve extraordinary moments
               </p>
               
               <div className={`${styles.coverScrollIndicator} cover-scroll-indicator`}>
-                <div className={styles.scrollText}>Desliza para explorar</div>
+                <div className={styles.scrollText}>Scroll to discover</div>
                 <div className={styles.scrollArrow}>
                   <ArrowRight className={styles.scrollArrowIcon} />
                 </div>
@@ -490,7 +490,7 @@ const Home = () => {
             {/* Small badge */}
             <div className={`${styles.heroBadge} hero-badge`}>
               <Zap className={styles.heroBadgeIcon} fill="currentColor" />
-              <span>Experiencias Épicas</span>
+              <span>Epic experiences</span>
               <Zap className={styles.heroBadgeIcon} fill="currentColor" />
             </div>
 
@@ -514,18 +514,18 @@ const Home = () => {
               <Link 
                 to="/events" 
                 className={`${styles.heroCtaButton} hero-cta-button`}
-                onClick={() => analytics.trackCTAClick('Ver Eventos', 'Hero Section')}
+                onClick={() => analytics.trackCTAClick('Browse Events', 'Hero Section')}
               >
-                Ver Eventos
+                Browse events
                 <ArrowRight className={styles.heroCtaButtonIcon} />
               </Link>
               {!user && (
                 <Link 
                   to="/auth" 
                   className={`${styles.heroCtaSecondary} hero-cta-button`}
-                  onClick={() => analytics.trackCTAClick('Iniciar Sesión', 'Hero Section')}
+                  onClick={() => analytics.trackCTAClick('Sign In', 'Hero Section')}
                 >
-                  Iniciar Sesión
+                  Sign in
                 </Link>
               )}
             </div>
@@ -545,13 +545,13 @@ const Home = () => {
           <div className={styles.eventsSectionHeader}>
             <div className={styles.eventsSectionBadge}>
               <Sparkles className={styles.eventsSectionBadgeIcon} />
-              <span className={styles.eventsSectionBadgeText}>Próximamente</span>
+              <span className={styles.eventsSectionBadgeText}>Coming soon...</span>
             </div>
             <h2 className={styles.eventsSectionTitle}>
-              Eventos <span className={styles.eventsSectionTitleGold}>Imperdibles</span>
+              Main <span className={styles.eventsSectionTitleGold}>events</span>
             </h2>
             <p className={styles.eventsSectionSubtitle}>
-              No te pierdas estas experiencias únicas
+              Dont miss out on these handpicked experiences
             </p>
           </div>
           
@@ -571,9 +571,9 @@ const Home = () => {
             <Link 
               to="/events" 
               className={styles.eventsButtonLink}
-              onClick={() => analytics.trackCTAClick('Ver Todos los Eventos', 'Events Section')}
+              onClick={() => analytics.trackCTAClick('Browse All Events', 'Events Section')}
             >
-              Ver Todos los Eventos
+              Browse all events
               <ArrowRight className={styles.eventsButtonIcon} />
             </Link>
           </div>
@@ -597,7 +597,7 @@ const Home = () => {
                   <div className={`${styles.urgentBadge} urgent-badge`}>
                     <Calendar className={styles.urgentBadgeIcon} />
                     <span className={styles.urgentBadgeText}>
-                      ¡Fecha Límite Próxima!
+                      Upcoming Deadline!
                     </span>
                   </div>
                   
@@ -624,9 +624,9 @@ const Home = () => {
                   <Link 
                     to={`/event/${urgentEvent.id}`} 
                     className={`${styles.urgentButton} urgent-button`}
-                    onClick={() => analytics.trackCTAClick('Reservar Ahora', `Urgent Event - ${urgentEvent.title}`)}
+                    onClick={() => analytics.trackCTAClick('Reserve Now', `Urgent Event - ${urgentEvent.title}`)}
                   >
-                    Reservar Ahora - ${urgentEvent.price}
+                    Reserve now - ${urgentEvent.price}
                     <ArrowRight className={styles.urgentButtonIcon} />
                   </Link>
                 </div>
@@ -654,13 +654,13 @@ const Home = () => {
           <div className={styles.finalContent}>
             <div className={styles.finalHeader}>
               <h2 className={styles.finalTitle}>
-                ¿Listo para la
+                Ready for your next
                 <span className={styles.finalTitleGold}>
-                  Aventura?
+                  Adventure?
                 </span>
               </h2>
               <p className={styles.finalSubtitle}>
-                Únete a miles de personas que ya disfrutan de experiencias únicas
+                Join EventVault today and unlock a world of unforgettable live experiences.
               </p>
             </div>
             
@@ -668,17 +668,17 @@ const Home = () => {
               <Link 
                 to="/auth" 
                 className={styles.finalPrimaryButton}
-                onClick={() => analytics.trackCTAClick('Crear Cuenta Gratis', 'Final CTA Section')}
+                onClick={() => analytics.trackCTAClick('Create Free Account', 'Final CTA Section')}
               >
-                Crear Cuenta Gratis
+                Create Free Account
                 <ArrowRight className={styles.buttonIcon} />
               </Link>
               <Link 
                 to="/events" 
                 className={styles.finalSecondaryButton}
-                onClick={() => analytics.trackCTAClick('Ver Todos los Eventos', 'Final CTA Section')}
+                onClick={() => analytics.trackCTAClick('Browse All Events', 'Final CTA Section')}
               >
-                Ver Todos los Eventos
+                Browse all Events
               </Link>
             </div>
           </div>

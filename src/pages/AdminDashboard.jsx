@@ -50,8 +50,8 @@ const AdminDashboard = () => {
         // Si el error es por RLS, mostrar mensaje específico
         if (reservationsError.code === 'PGRST116' || reservationsError.message?.includes('row-level security')) {
           toast({
-            title: 'Error de permisos',
-            description: 'Necesitas configurar las políticas RLS en Supabase para ver las reservas como admin',
+            title: 'Permission Error',
+            description: 'You need to configure RLS policies in Supabase to view reservations as admin',
             variant: 'destructive'
           });
         }

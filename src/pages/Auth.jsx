@@ -56,10 +56,10 @@ const Auth = () => {
       <div className={`${styles.card} auth-card`}>
         <div className={styles.cardHeader}>
           <h1 className={styles.cardTitle}>
-            Bienvenido a EventHub
+            Welcome to EventHub
           </h1>
           <p className={styles.cardDescription}>
-            Inicia sesión o crea una cuenta para reservar eventos
+            Sign in or create an account to reserve events
           </p>
         </div>
         <div className={styles.cardContent}>
@@ -70,14 +70,14 @@ const Auth = () => {
                 data-state={activeTab === 'signin' ? 'active' : 'inactive'}
                 onClick={() => setActiveTab('signin')}
               >
-                Iniciar Sesión
+                Sign In
               </button>
               <button
                 className={styles.tabsTrigger}
                 data-state={activeTab === 'signup' ? 'active' : 'inactive'}
                 onClick={() => setActiveTab('signup')}
               >
-                Registrarse
+                Sign Up
               </button>
             </div>
 
@@ -89,7 +89,7 @@ const Auth = () => {
                     <input
                       id="signin-email"
                       type="email"
-                      placeholder="tu@email.com"
+                      placeholder="you@email.com"
                       value={signInEmail}
                       onChange={(e) => setSignInEmail(e.target.value)}
                       required
@@ -98,7 +98,7 @@ const Auth = () => {
                     />
                   </div>
                   <div className={styles.formGroup}>
-                    <label htmlFor="signin-password" className={styles.label}>Contraseña</label>
+                    <label htmlFor="signin-password" className={styles.label}>Password</label>
                     <input
                       id="signin-password"
                       type="password"
@@ -111,11 +111,11 @@ const Auth = () => {
                     />
                   </div>
                   <button type="submit" className={styles.button} disabled={loading}>
-                    {loading ? 'Iniciando...' : 'Iniciar Sesión'}
+                    {loading ? 'Signing in...' : 'Sign In'}
                   </button>
                   
                   <div className={styles.divider}>
-                    <span className={styles.dividerText}>O continúa con</span>
+                    <span className={styles.dividerText}>Or continue with</span>
                   </div>
 
                   <button 
@@ -130,7 +130,7 @@ const Auth = () => {
                       <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                       <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                     </svg>
-                    Continuar con Google
+                    Continue with Google
                   </button>
                 </form>
               </div>
@@ -140,11 +140,11 @@ const Auth = () => {
               <div className={styles.tabsContent}>
                 <form onSubmit={handleSignUp} className={styles.form}>
                   <div className={styles.formGroup}>
-                    <label htmlFor="signup-name" className={styles.label}>Nombre</label>
+                    <label htmlFor="signup-name" className={styles.label}>Name</label>
                     <input
                       id="signup-name"
                       type="text"
-                      placeholder="Tu nombre"
+                      placeholder="Your name"
                       value={signUpName}
                       onChange={(e) => setSignUpName(e.target.value)}
                       required
@@ -156,7 +156,7 @@ const Auth = () => {
                     <input
                       id="signup-email"
                       type="email"
-                      placeholder="tu@email.com"
+                      placeholder="you@email.com"
                       value={signUpEmail}
                       onChange={(e) => setSignUpEmail(e.target.value)}
                       required
@@ -165,7 +165,7 @@ const Auth = () => {
                     />
                   </div>
                   <div className={styles.formGroup}>
-                    <label htmlFor="signup-password" className={styles.label}>Contraseña</label>
+                    <label htmlFor="signup-password" className={styles.label}>Password</label>
                     <input
                       id="signup-password"
                       type="password"
@@ -179,11 +179,11 @@ const Auth = () => {
                     />
                   </div>
                   <button type="submit" className={styles.button} disabled={loading}>
-                    {loading ? 'Creando cuenta...' : 'Crear Cuenta'}
+                    {loading ? 'Creating account...' : 'Create Account'}
                   </button>
 
                   <div className={styles.divider}>
-                    <span className={styles.dividerText}>O continúa con</span>
+                    <span className={styles.dividerText}>Or continue with</span>
                   </div>
 
                   <button 
@@ -198,7 +198,7 @@ const Auth = () => {
                       <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                       <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                     </svg>
-                    Continuar con Google
+                    Continue with Google
                   </button>
                 </form>
               </div>

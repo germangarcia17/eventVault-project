@@ -23,23 +23,22 @@ const Success = () => {
             <CheckCircle className={styles.icon} />
           </div>
           <h1 className={styles.title}>
-            ¡Reserva Confirmada!
+            ¡Reservation Confirmed!
           </h1>
           <p className={styles.description}>
-            Tu pago ha sido procesado exitosamente
+            Your ticket has been successfully booked.
           </p>
         </div>
         <div className={styles.cardContent}>
           <p className={styles.message}>
-            Hemos enviado tu entrada y código QR a tu email. También puedes verlo en tu panel de
-            reservas.
+            We have sent your ticket and QR code to your email. You can also view it in your dashboard.
           </p>
           <div className={styles.actions}>
             <button className={styles.button} onClick={() => navigate('/dashboard')}>
-              Ver Mis Reservas
+              View My Reservations
             </button>
             <button className={`${styles.button} ${styles.buttonOutline}`} onClick={() => navigate('/', { state: { fromInternal: true } })}>
-              Explorar Más Eventos
+              Explore More Events
             </button>
           </div>
         </div>
