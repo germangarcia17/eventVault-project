@@ -401,6 +401,13 @@ const Home = () => {
     
     const timeline = gsap.timeline({
       onComplete: () => {
+        console.log('=== TRANSITION COMPLETE ===');
+        console.log('Body height:', document.body.scrollHeight);
+        console.log('Window height:', window.innerHeight);
+        console.log('Body overflow:', getComputedStyle(document.body).overflow);
+        console.log('HTML overflow:', getComputedStyle(document.documentElement).overflow);
+        console.log('Can scroll:', document.body.scrollHeight > window.innerHeight);
+        
         setShowCover(false);
         setCoverAnimationComplete(true);
         setShowPlaceholder(false);
@@ -410,12 +417,17 @@ const Home = () => {
         document.body.style.overflow = 'auto';
         document.documentElement.style.overflow = 'auto';
         
+        console.log('After setting overflow auto:');
+        console.log('Body overflow:', getComputedStyle(document.body).overflow);
+        console.log('HTML overflow:', getComputedStyle(document.documentElement).overflow);
+        
         // Force a small scroll to "wake up" the scroll system
         window.scrollTo(0, 1);
         
         // Then scroll back to top smoothly so user can scroll down
         setTimeout(() => {
           window.scrollTo({ top: 0, behavior: 'instant' });
+          console.log('Current scroll position:', window.scrollY);
         }, 0);
       }
     });
