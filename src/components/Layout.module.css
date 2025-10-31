@@ -2,6 +2,9 @@
 .container {
   min-height: 100vh;
   background-color: hsl(0, 0%, 7%);
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
 }
 
 /* Header */
@@ -370,6 +373,8 @@
   margin: 0 auto;
   padding: 2rem 1rem;
   max-width: 1280px;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 /* Footer */
