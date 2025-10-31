@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Calendar, ArrowRight, Sparkles, Zap } from 'lucide-react';
 import { EventCard } from '@/components/EventCard';
@@ -17,6 +17,7 @@ const Home = () => {
   const location = useLocation();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const mainContentRef = useRef(null);
   
   // Check if user should see cover:
   // - Not if coming from internal navigation (location.state)
@@ -424,6 +425,16 @@ const Home = () => {
   // Get the event with the closest deadline
   const urgentEvent = upcomingEvents[0];
 
+  // Function to scroll to main content
+  const scrollToMainContent = () => {
+    if (mainContentRef.current) {
+      mainContentRef.current.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
+
   return (
     <>
       {/* Cover Page - Only shown on first visit */}
@@ -444,7 +455,11 @@ const Home = () => {
                 Reserve extraordinary moments
               </p>
               
-              <div className={`${styles.coverScrollIndicator} cover-scroll-indicator`}>
+              <div 
+                className={`${styles.coverScrollIndicator} cover-scroll-indicator`}
+                onClick={scrollToMainContent}
+                style={{ cursor: 'pointer' }}
+              >
                 <div className={styles.scrollText}>Scroll to discover</div>
                 <div className={styles.scrollArrow}>
                   <ArrowRight className={styles.scrollArrowIcon} />
@@ -461,6 +476,7 @@ const Home = () => {
 
       {/* Main Content */}
       <div 
+        ref={mainContentRef}
         className={`${styles.container} main-content`}
         style={{ 
           opacity: showCover ? 0 : 1,
