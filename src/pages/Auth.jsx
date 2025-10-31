@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { gsap } from 'gsap';
 import styles from './Auth.module.css';
@@ -13,11 +14,13 @@ const Auth = () => {
   // Sign in form
   const [signInEmail, setSignInEmail] = useState('');
   const [signInPassword, setSignInPassword] = useState('');
+  const [showSignInPassword, setShowSignInPassword] = useState(false);
 
   // Sign up form
   const [signUpEmail, setSignUpEmail] = useState('');
   const [signUpPassword, setSignUpPassword] = useState('');
   const [signUpName, setSignUpName] = useState('');
+  const [showSignUpPassword, setShowSignUpPassword] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -99,16 +102,30 @@ const Auth = () => {
                   </div>
                   <div className={styles.formGroup}>
                     <label htmlFor="signin-password" className={styles.label}>Password</label>
-                    <input
-                      id="signin-password"
-                      type="password"
-                      placeholder="••••••••"
-                      value={signInPassword}
-                      onChange={(e) => setSignInPassword(e.target.value)}
-                      required
-                      autoComplete="current-password"
-                      className={styles.input}
-                    />
+                    <div className={styles.passwordWrapper}>
+                      <input
+                        id="signin-password"
+                        type={showSignInPassword ? "text" : "password"}
+                        placeholder="••••••••"
+                        value={signInPassword}
+                        onChange={(e) => setSignInPassword(e.target.value)}
+                        required
+                        autoComplete="current-password"
+                        className={styles.input}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowSignInPassword(!showSignInPassword)}
+                        className={styles.passwordToggle}
+                        aria-label={showSignInPassword ? "Hide password" : "Show password"}
+                      >
+                        {showSignInPassword ? (
+                          <EyeOff className={styles.eyeIcon} />
+                        ) : (
+                          <Eye className={styles.eyeIcon} />
+                        )}
+                      </button>
+                    </div>
                   </div>
                   <button type="submit" className={styles.button} disabled={loading}>
                     {loading ? 'Signing in...' : 'Sign In'}
@@ -166,17 +183,31 @@ const Auth = () => {
                   </div>
                   <div className={styles.formGroup}>
                     <label htmlFor="signup-password" className={styles.label}>Password</label>
-                    <input
-                      id="signup-password"
-                      type="password"
-                      placeholder="••••••••"
-                      value={signUpPassword}
-                      onChange={(e) => setSignUpPassword(e.target.value)}
-                      required
-                      minLength={6}
-                      autoComplete="new-password"
-                      className={styles.input}
-                    />
+                    <div className={styles.passwordWrapper}>
+                      <input
+                        id="signup-password"
+                        type={showSignUpPassword ? "text" : "password"}
+                        placeholder="••••••••"
+                        value={signUpPassword}
+                        onChange={(e) => setSignUpPassword(e.target.value)}
+                        required
+                        minLength={6}
+                        autoComplete="new-password"
+                        className={styles.input}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowSignUpPassword(!showSignUpPassword)}
+                        className={styles.passwordToggle}
+                        aria-label={showSignUpPassword ? "Hide password" : "Show password"}
+                      >
+                        {showSignUpPassword ? (
+                          <EyeOff className={styles.eyeIcon} />
+                        ) : (
+                          <Eye className={styles.eyeIcon} />
+                        )}
+                      </button>
+                    </div>
                   </div>
                   <button type="submit" className={styles.button} disabled={loading}>
                     {loading ? 'Creating account...' : 'Create Account'}
