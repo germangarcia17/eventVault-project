@@ -363,6 +363,7 @@ const Home = () => {
 
       // Cleanup function for event listeners
       const cleanupListeners = () => {
+        console.log('Cleaning up scroll listeners');
         window.removeEventListener('wheel', handleWheel);
         window.removeEventListener('touchstart', handleTouchStart);
         window.removeEventListener('touchmove', handleTouchMove);
@@ -400,6 +401,9 @@ const Home = () => {
 
   // Function to trigger the cover transition
   const triggerCoverTransition = () => {
+    console.log('=== Starting cover transition ===');
+    console.log('Overflow before:', document.body.style.overflow);
+    
     // Mark that we're transitioning
     isTransitioningRef.current = true;
     
@@ -411,6 +415,9 @@ const Home = () => {
     document.documentElement.style.overflow = '';
     document.body.style.removeProperty('overflow');
     document.documentElement.style.removeProperty('overflow');
+    
+    console.log('Overflow after:', document.body.style.overflow);
+    console.log('Can scroll now? Body height:', document.body.scrollHeight, 'Window height:', window.innerHeight);
     
     // Show main content immediately with opacity 0
     const mainContent = document.querySelector('.main-content');
@@ -468,6 +475,7 @@ const Home = () => {
     if (showCover) {
       // Clean up event listeners before triggering transition
       if (window.__coverCleanup) {
+        console.log('Cleaning up listeners from click');
         window.__coverCleanup();
         delete window.__coverCleanup;
       }
@@ -475,6 +483,7 @@ const Home = () => {
       triggerCoverTransition();
     } else if (mainContentRef.current) {
       // Otherwise, just scroll to content
+      console.log('Scrolling to content');
       mainContentRef.current.scrollIntoView({ 
         behavior: 'smooth',
         block: 'start'
