@@ -406,6 +406,13 @@ const Home = () => {
     document.body.style.overflow = 'auto';
     document.documentElement.style.overflow = 'auto';
     
+    // Show main content immediately (but with opacity 0)
+    const mainContent = document.querySelector('.main-content');
+    if (mainContent) {
+      mainContent.style.display = 'block';
+      gsap.set(mainContent, { opacity: 0 });
+    }
+    
     // Wait for placeholder to render before starting animation
     setTimeout(() => {
       // Animate both cover and main content simultaneously
@@ -417,7 +424,11 @@ const Home = () => {
           document.body.style.overflow = 'auto';
           document.documentElement.style.overflow = 'auto';
           // Hide placeholder after a small delay to ensure content is ready
-          setTimeout(() => setShowPlaceholder(false), 100);
+          setTimeout(() => {
+            setShowPlaceholder(false);
+            // Final check to ensure scroll works
+            window.scrollTo(0, 0);
+          }, 100);
         }
       });
       
@@ -440,9 +451,8 @@ const Home = () => {
       }
       
       // Main content fade in at the same time
-      timeline.fromTo(
+      timeline.to(
         '.main-content',
-        { opacity: 0 },
         { opacity: 1, duration: 1, ease: 'power2.out' },
         0
       );
@@ -512,12 +522,7 @@ const Home = () => {
         ref={mainContentRef}
         className={`${styles.container} main-content`}
         style={{ 
-          opacity: showCover ? 0 : 1,
-          position: showCover ? 'fixed' : 'relative',
-          top: showCover ? 0 : 'auto',
-          left: showCover ? 0 : 'auto',
-          right: showCover ? 0 : 'auto',
-          visibility: showCover ? 'hidden' : 'visible'
+          display: showCover ? 'none' : 'block'
         }}
       >
         <div className={styles.sectionSpacing}>
