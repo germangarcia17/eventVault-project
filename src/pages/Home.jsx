@@ -425,7 +425,7 @@ const Home = () => {
         { opacity: 1, duration: 1, ease: 'power2.out' },
         0
       );
-    }, 50); // Small delay to ensure DOM is updated
+    }, 30); // Small delay to ensure DOM is updated
   };
 
   // Function to scroll to main content (triggers cover transition if cover is visible)
