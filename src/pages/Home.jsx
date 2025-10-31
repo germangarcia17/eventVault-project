@@ -497,16 +497,16 @@ const Home = () => {
             {/* Main dramatic title */}
             <h1 className={styles.heroTitle}>
               <span className={`${styles.heroTitleLine1} hero-title-line-1`}>
-                ES AUTOMÁTICO
+                LIVE,
               </span>
               <span className={`${styles.heroTitleLine2} hero-title-line-2`}>
-                ES SISTEMÁTICO
+                EXPERIENCE
               </span>
             </h1>
 
             {/* Subtitle */}
             <p className={`${styles.heroSubtitle} hero-subtitle-text`}>
-              ¡Son los eventos más electrizantes!
+              Moments that last a lifetime
             </p>
 
             {/* CTA Buttons */}
