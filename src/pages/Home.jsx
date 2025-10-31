@@ -399,36 +399,30 @@ const Home = () => {
     // Mark that user has seen the cover in this session
     sessionStorage.setItem('hasSeenCover', 'true');
     
-    // Show placeholder immediately
-    setShowPlaceholder(true);
+    // IMMEDIATELY show main content and enable scroll
+    setShowCover(false);
+    setCoverAnimationComplete(true);
     
     // Re-enable body scroll immediately
     document.body.style.overflow = 'auto';
     document.documentElement.style.overflow = 'auto';
     
-    // Show main content immediately (but with opacity 0)
+    // Show main content immediately with opacity 0
     const mainContent = document.querySelector('.main-content');
     if (mainContent) {
       mainContent.style.display = 'block';
       gsap.set(mainContent, { opacity: 0 });
     }
     
-    // Wait for placeholder to render before starting animation
+    // Show placeholder for smooth transition
+    setShowPlaceholder(true);
+    
+    // Start animation immediately
     setTimeout(() => {
-      // Animate both cover and main content simultaneously
       const timeline = gsap.timeline({
         onComplete: () => {
-          setShowCover(false);
-          setCoverAnimationComplete(true);
-          // Ensure scroll is enabled after animation completes
-          document.body.style.overflow = 'auto';
-          document.documentElement.style.overflow = 'auto';
-          // Hide placeholder after a small delay to ensure content is ready
-          setTimeout(() => {
-            setShowPlaceholder(false);
-            // Final check to ensure scroll works
-            window.scrollTo(0, 0);
-          }, 100);
+          // Hide placeholder after animation
+          setShowPlaceholder(false);
         }
       });
       
@@ -440,7 +434,7 @@ const Home = () => {
         ease: 'power2.in'
       }, 0);
       
-      // Placeholder fade out (check if exists first)
+      // Placeholder fade out
       const placeholderElement = document.querySelector('.content-placeholder');
       if (placeholderElement) {
         timeline.to('.content-placeholder', {
@@ -450,13 +444,13 @@ const Home = () => {
         }, 0.5);
       }
       
-      // Main content fade in at the same time
+      // Main content fade in
       timeline.to(
         '.main-content',
         { opacity: 1, duration: 1, ease: 'power2.out' },
         0
       );
-    }, 50); // Small delay to ensure DOM is updated
+    }, 50);
   };
 
   // Function to scroll to main content (triggers cover transition if cover is visible)
