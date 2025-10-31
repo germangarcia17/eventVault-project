@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Calendar, ArrowRight, Sparkles, Zap } from 'lucide-react';
 import { EventCard } from '@/components/EventCard';
@@ -17,6 +17,7 @@ const Home = () => {
   const location = useLocation();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const mainContentRef = useRef(null);
   
   // Check if user should see cover:
   // - Not if coming from internal navigation (location.state)
@@ -39,6 +40,13 @@ const Home = () => {
   const [showCover, setShowCover] = useState(shouldShowCover());
   const [coverAnimationComplete, setCoverAnimationComplete] = useState(!shouldShowCover());
   const [showPlaceholder, setShowPlaceholder] = useState(false);
+
+  // Ensure body scroll is enabled when cover is not shown
+  useEffect(() => {
+    if (!shouldShowCover()) {
+      document.body.style.overflow = 'auto';
+    }
+  }, []);
 
   useEffect(() => {
     fetchEvents();
@@ -319,64 +327,11 @@ const Home = () => {
           scrollCount++;
           
           if (scrollCount >= scrollThreshold) {
-            // Trigger transition
-            triggerTransition();
+            // Remove listeners before triggering transition
+            cleanupListeners();
+            triggerCoverTransition();
           }
         }
-      };
-
-      const triggerTransition = () => {
-        // Remove listeners
-        window.removeEventListener('wheel', handleWheel);
-        window.removeEventListener('touchmove', handleTouchMove);
-        
-        // Mark that user has seen the cover in this session
-        sessionStorage.setItem('hasSeenCover', 'true');
-        
-        // Show placeholder immediately
-        setShowPlaceholder(true);
-        
-        // Re-enable body scroll
-        document.body.style.overflow = 'auto';
-        
-        // Wait for placeholder to render before starting animation
-        setTimeout(() => {
-          // Animate both cover and main content simultaneously
-          const timeline = gsap.timeline({
-            onComplete: () => {
-              setShowCover(false);
-              setCoverAnimationComplete(true);
-              // Hide placeholder after a small delay to ensure content is ready
-              setTimeout(() => setShowPlaceholder(false), 100);
-            }
-          });
-          
-          // Cover zoom out and fade out
-          timeline.to('.cover-page', {
-            scale: 1.5,
-            opacity: 0,
-            duration: 1,
-            ease: 'power2.in'
-          }, 0);
-          
-          // Placeholder fade out (check if exists first)
-          const placeholderElement = document.querySelector('.content-placeholder');
-          if (placeholderElement) {
-            timeline.to('.content-placeholder', {
-              opacity: 0,
-              duration: 0.5,
-              ease: 'power2.in'
-            }, 0.5);
-          }
-          
-          // Main content fade in at the same time
-          timeline.fromTo(
-            '.main-content',
-            { opacity: 0 },
-            { opacity: 1, duration: 1, ease: 'power2.out' },
-            0
-          );
-        }, 50); // Small delay to ensure DOM is updated
       };
 
       // Handle touch events for mobile
@@ -395,23 +350,38 @@ const Home = () => {
           touchMoveCount++;
           
           if (touchMoveCount >= scrollThreshold) {
-            triggerTransition();
+            // Remove listeners before triggering transition
+            cleanupListeners();
+            triggerCoverTransition();
           }
         }
       };
+
+      // Cleanup function for event listeners
+      const cleanupListeners = () => {
+        window.removeEventListener('wheel', handleWheel);
+        window.removeEventListener('touchstart', handleTouchStart);
+        window.removeEventListener('touchmove', handleTouchMove);
+      };
+
+      // Store cleanup function globally so click handler can access it
+      window.__coverCleanup = cleanupListeners;
 
       window.addEventListener('wheel', handleWheel, { passive: true });
       window.addEventListener('touchstart', handleTouchStart, { passive: true });
       window.addEventListener('touchmove', handleTouchMove, { passive: true });
 
       return () => {
-        window.removeEventListener('wheel', handleWheel);
-        window.removeEventListener('touchstart', handleTouchStart);
-        window.removeEventListener('touchmove', handleTouchMove);
+        cleanupListeners();
+        delete window.__coverCleanup;
         document.body.style.overflow = 'auto';
+        document.documentElement.style.overflow = 'auto';
       };
     } else if (!showCover && coverAnimationComplete) {
       // If cover is not shown (already seen in session), show content immediately
+      // Ensure body scroll is enabled
+      document.body.style.overflow = 'auto';
+      document.documentElement.style.overflow = 'auto';
       gsap.set('.main-content', { opacity: 1 });
     }
   }, [showCover, loading, coverAnimationComplete]);
@@ -423,6 +393,90 @@ const Home = () => {
 
   // Get the event with the closest deadline
   const urgentEvent = upcomingEvents[0];
+
+  // Function to trigger the cover transition
+  const triggerCoverTransition = () => {
+    // Mark that user has seen the cover in this session
+    sessionStorage.setItem('hasSeenCover', 'true');
+    
+    // Show placeholder immediately
+    setShowPlaceholder(true);
+    
+    // Re-enable body scroll immediately
+    document.body.style.overflow = 'auto';
+    document.documentElement.style.overflow = 'auto';
+    
+    // Show main content immediately (but with opacity 0)
+    const mainContent = document.querySelector('.main-content');
+    if (mainContent) {
+      mainContent.style.display = 'block';
+      gsap.set(mainContent, { opacity: 0 });
+    }
+    
+    // Wait for placeholder to render before starting animation
+    setTimeout(() => {
+      // Animate both cover and main content simultaneously
+      const timeline = gsap.timeline({
+        onComplete: () => {
+          setShowCover(false);
+          setCoverAnimationComplete(true);
+          // Ensure scroll is enabled after animation completes
+          document.body.style.overflow = 'auto';
+          document.documentElement.style.overflow = 'auto';
+          // Hide placeholder after a small delay to ensure content is ready
+          setTimeout(() => {
+            setShowPlaceholder(false);
+            // Final check to ensure scroll works
+            window.scrollTo(0, 0);
+          }, 100);
+        }
+      });
+      
+      // Cover zoom out and fade out
+      timeline.to('.cover-page', {
+        scale: 1.5,
+        opacity: 0,
+        duration: 1,
+        ease: 'power2.in'
+      }, 0);
+      
+      // Placeholder fade out (check if exists first)
+      const placeholderElement = document.querySelector('.content-placeholder');
+      if (placeholderElement) {
+        timeline.to('.content-placeholder', {
+          opacity: 0,
+          duration: 0.5,
+          ease: 'power2.in'
+        }, 0.5);
+      }
+      
+      // Main content fade in at the same time
+      timeline.to(
+        '.main-content',
+        { opacity: 1, duration: 1, ease: 'power2.out' },
+        0
+      );
+    }, 50); // Small delay to ensure DOM is updated
+  };
+
+  // Function to scroll to main content (triggers cover transition if cover is visible)
+  const scrollToMainContent = () => {
+    if (showCover) {
+      // Clean up event listeners before triggering transition
+      if (window.__coverCleanup) {
+        window.__coverCleanup();
+        delete window.__coverCleanup;
+      }
+      // If cover is showing, trigger the transition
+      triggerCoverTransition();
+    } else if (mainContentRef.current) {
+      // Otherwise, just scroll to content
+      mainContentRef.current.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
 
   return (
     <>
@@ -444,7 +498,11 @@ const Home = () => {
                 Reserve extraordinary moments
               </p>
               
-              <div className={`${styles.coverScrollIndicator} cover-scroll-indicator`}>
+              <div 
+                className={`${styles.coverScrollIndicator} cover-scroll-indicator`}
+                onClick={scrollToMainContent}
+                style={{ cursor: 'pointer' }}
+              >
                 <div className={styles.scrollText}>Scroll to discover</div>
                 <div className={styles.scrollArrow}>
                   <ArrowRight className={styles.scrollArrowIcon} />
@@ -461,14 +519,10 @@ const Home = () => {
 
       {/* Main Content */}
       <div 
+        ref={mainContentRef}
         className={`${styles.container} main-content`}
         style={{ 
-          opacity: showCover ? 0 : 1,
-          position: showCover ? 'fixed' : 'relative',
-          top: showCover ? 0 : 'auto',
-          left: showCover ? 0 : 'auto',
-          right: showCover ? 0 : 'auto',
-          visibility: showCover ? 'hidden' : 'visible'
+          display: showCover ? 'none' : 'block'
         }}
       >
         <div className={styles.sectionSpacing}>
