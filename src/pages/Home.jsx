@@ -327,10 +327,8 @@ const Home = () => {
           scrollCount++;
           
           if (scrollCount >= scrollThreshold) {
-            // Trigger transition
-            window.removeEventListener('wheel', handleWheel);
-            window.removeEventListener('touchstart', handleTouchStart);
-            window.removeEventListener('touchmove', handleTouchMove);
+            // Remove listeners before triggering transition
+            cleanupListeners();
             triggerCoverTransition();
           }
         }
@@ -352,28 +350,38 @@ const Home = () => {
           touchMoveCount++;
           
           if (touchMoveCount >= scrollThreshold) {
-            window.removeEventListener('wheel', handleWheel);
-            window.removeEventListener('touchstart', handleTouchStart);
-            window.removeEventListener('touchmove', handleTouchMove);
+            // Remove listeners before triggering transition
+            cleanupListeners();
             triggerCoverTransition();
           }
         }
       };
+
+      // Cleanup function for event listeners
+      const cleanupListeners = () => {
+        window.removeEventListener('wheel', handleWheel);
+        window.removeEventListener('touchstart', handleTouchStart);
+        window.removeEventListener('touchmove', handleTouchMove);
+      };
+
+      // Store cleanup function globally so click handler can access it
+      window.__coverCleanup = cleanupListeners;
 
       window.addEventListener('wheel', handleWheel, { passive: true });
       window.addEventListener('touchstart', handleTouchStart, { passive: true });
       window.addEventListener('touchmove', handleTouchMove, { passive: true });
 
       return () => {
-        window.removeEventListener('wheel', handleWheel);
-        window.removeEventListener('touchstart', handleTouchStart);
-        window.removeEventListener('touchmove', handleTouchMove);
+        cleanupListeners();
+        delete window.__coverCleanup;
         document.body.style.overflow = 'auto';
+        document.documentElement.style.overflow = 'auto';
       };
     } else if (!showCover && coverAnimationComplete) {
       // If cover is not shown (already seen in session), show content immediately
       // Ensure body scroll is enabled
       document.body.style.overflow = 'auto';
+      document.documentElement.style.overflow = 'auto';
       gsap.set('.main-content', { opacity: 1 });
     }
   }, [showCover, loading, coverAnimationComplete]);
@@ -444,6 +452,11 @@ const Home = () => {
   // Function to scroll to main content (triggers cover transition if cover is visible)
   const scrollToMainContent = () => {
     if (showCover) {
+      // Clean up event listeners before triggering transition
+      if (window.__coverCleanup) {
+        window.__coverCleanup();
+        delete window.__coverCleanup;
+      }
       // If cover is showing, trigger the transition
       triggerCoverTransition();
     } else if (mainContentRef.current) {
