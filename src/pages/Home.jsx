@@ -18,6 +18,7 @@ const Home = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const mainContentRef = useRef(null);
+  const isTransitioningRef = useRef(false);
   
   // Check if user should see cover:
   // - Not if coming from internal navigation (location.state)
@@ -40,13 +41,6 @@ const Home = () => {
   const [showCover, setShowCover] = useState(shouldShowCover());
   const [coverAnimationComplete, setCoverAnimationComplete] = useState(!shouldShowCover());
   const [showPlaceholder, setShowPlaceholder] = useState(false);
-
-  // Ensure body scroll is enabled when cover is not shown
-  useEffect(() => {
-    if (!shouldShowCover()) {
-      document.body.style.overflow = 'auto';
-    }
-  }, []);
 
   useEffect(() => {
     fetchEvents();
@@ -286,8 +280,7 @@ const Home = () => {
   // Cover page scroll animation
   useEffect(() => {
     if (showCover && !loading) {
-      // Block body scroll initially
-      document.body.style.overflow = 'hidden';
+      // Don't block scroll - the content is rendered below the fixed cover
       
       // Animate cover entrance
       gsap.fromTo(
@@ -374,14 +367,9 @@ const Home = () => {
       return () => {
         cleanupListeners();
         delete window.__coverCleanup;
-        document.body.style.overflow = 'auto';
-        document.documentElement.style.overflow = 'auto';
       };
     } else if (!showCover && coverAnimationComplete) {
       // If cover is not shown (already seen in session), show content immediately
-      // Ensure body scroll is enabled
-      document.body.style.overflow = 'auto';
-      document.documentElement.style.overflow = 'auto';
       gsap.set('.main-content', { opacity: 1 });
     }
   }, [showCover, loading, coverAnimationComplete]);
@@ -396,67 +384,56 @@ const Home = () => {
 
   // Function to trigger the cover transition
   const triggerCoverTransition = () => {
+    if (isTransitioningRef.current) return;
+    
+    // Mark that we're transitioning
+    isTransitioningRef.current = true;
+    
     // Mark that user has seen the cover in this session
     sessionStorage.setItem('hasSeenCover', 'true');
     
-    // Show placeholder immediately
+    // Show placeholder for smooth transition
     setShowPlaceholder(true);
     
-    // Re-enable body scroll immediately
-    document.body.style.overflow = 'auto';
-    document.documentElement.style.overflow = 'auto';
+    const timeline = gsap.timeline({
+      onComplete: () => {
+        setShowCover(false);
+        setCoverAnimationComplete(true);
+        setShowPlaceholder(false);
+        isTransitioningRef.current = false;
+      }
+    });
     
-    // Show main content immediately (but with opacity 0)
-    const mainContent = document.querySelector('.main-content');
-    if (mainContent) {
-      mainContent.style.display = 'block';
-      gsap.set(mainContent, { opacity: 0 });
-    }
-    
-    // Wait for placeholder to render before starting animation
-    setTimeout(() => {
-      // Animate both cover and main content simultaneously
-      const timeline = gsap.timeline({
-        onComplete: () => {
-          setShowCover(false);
-          setCoverAnimationComplete(true);
-          // Ensure scroll is enabled after animation completes
-          document.body.style.overflow = 'auto';
-          document.documentElement.style.overflow = 'auto';
-          // Hide placeholder after a small delay to ensure content is ready
-          setTimeout(() => {
-            setShowPlaceholder(false);
-            // Final check to ensure scroll works
-            window.scrollTo(0, 0);
-          }, 100);
-        }
-      });
-      
-      // Cover zoom out and fade out
-      timeline.to('.cover-page', {
+    // Cover zoom out and fade out
+    const coverElement = document.querySelector('.cover-page');
+    if (coverElement) {
+      timeline.to(coverElement, {
         scale: 1.5,
         opacity: 0,
         duration: 1,
         ease: 'power2.in'
       }, 0);
-      
-      // Placeholder fade out (check if exists first)
-      const placeholderElement = document.querySelector('.content-placeholder');
-      if (placeholderElement) {
-        timeline.to('.content-placeholder', {
-          opacity: 0,
-          duration: 0.5,
-          ease: 'power2.in'
-        }, 0.5);
-      }
-      
-      // Main content fade in at the same time
+    }
+    
+    // Placeholder fade out
+    const placeholderElement = document.querySelector('.content-placeholder');
+    if (placeholderElement) {
+      timeline.to(placeholderElement, {
+        opacity: 0,
+        duration: 0.5,
+        ease: 'power2.in'
+      }, 0.5);
+    }
+    
+    // Main content fade in - starts immediately
+    const mainContent = document.querySelector('.main-content');
+    if (mainContent) {
       timeline.to(
-        '.main-content',
+        mainContent,
         { opacity: 1, duration: 1, ease: 'power2.out' },
         0
       );
-    }, 50); // Small delay to ensure DOM is updated
+    }
   };
 
   // Function to scroll to main content (triggers cover transition if cover is visible)
@@ -522,7 +499,8 @@ const Home = () => {
         ref={mainContentRef}
         className={`${styles.container} main-content`}
         style={{ 
-          display: showCover ? 'none' : 'block'
+          opacity: showCover ? 0 : 1,
+          pointerEvents: showCover ? 'none' : 'auto'
         }}
       >
         <div className={styles.sectionSpacing}>
