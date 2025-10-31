@@ -18,6 +18,7 @@ const Home = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const mainContentRef = useRef(null);
+  const isTransitioningRef = useRef(false);
   
   // Check if user should see cover:
   // - Not if coming from internal navigation (location.state)
@@ -286,8 +287,11 @@ const Home = () => {
   // Cover page scroll animation
   useEffect(() => {
     if (showCover && !loading) {
-      // Block body scroll initially
-      document.body.style.overflow = 'hidden';
+      // Block body scroll initially ONLY if we're not transitioning
+      if (!isTransitioningRef.current) {
+        document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden';
+      }
       
       // Animate cover entrance
       gsap.fromTo(
@@ -396,6 +400,9 @@ const Home = () => {
 
   // Function to trigger the cover transition
   const triggerCoverTransition = () => {
+    // Mark that we're transitioning
+    isTransitioningRef.current = true;
+    
     // Mark that user has seen the cover in this session
     sessionStorage.setItem('hasSeenCover', 'true');
     
@@ -403,9 +410,11 @@ const Home = () => {
     setShowCover(false);
     setCoverAnimationComplete(true);
     
-    // Re-enable body scroll immediately
+    // Force enable scroll NOW
     document.body.style.overflow = 'auto';
     document.documentElement.style.overflow = 'auto';
+    document.body.style.removeProperty('overflow');
+    document.documentElement.style.removeProperty('overflow');
     
     // Show main content immediately with opacity 0
     const mainContent = document.querySelector('.main-content');
