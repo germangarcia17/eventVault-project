@@ -402,33 +402,46 @@ const Home = () => {
     const timeline = gsap.timeline({
       onComplete: () => {
         console.log('=== TRANSITION COMPLETE ===');
-        console.log('Body height:', document.body.scrollHeight);
-        console.log('Window height:', window.innerHeight);
-        console.log('Body overflow:', getComputedStyle(document.body).overflow);
-        console.log('HTML overflow:', getComputedStyle(document.documentElement).overflow);
-        console.log('Can scroll:', document.body.scrollHeight > window.innerHeight);
         
+        // Hide cover and placeholder FIRST so React removes them from DOM
         setShowCover(false);
         setCoverAnimationComplete(true);
         setShowPlaceholder(false);
         isTransitioningRef.current = false;
         
-        // Force scroll to be enabled after animation completes
-        document.body.style.overflow = 'auto';
-        document.documentElement.style.overflow = 'auto';
-        
-        console.log('After setting overflow auto:');
-        console.log('Body overflow:', getComputedStyle(document.body).overflow);
-        console.log('HTML overflow:', getComputedStyle(document.documentElement).overflow);
-        
-        // Force a small scroll to "wake up" the scroll system
-        window.scrollTo(0, 1);
-        
-        // Then scroll back to top smoothly so user can scroll down
+        // Wait a moment for React to update DOM, then cleanup
         setTimeout(() => {
-          window.scrollTo({ top: 0, behavior: 'instant' });
-          console.log('Current scroll position:', window.scrollY);
-        }, 0);
+          console.log('Body height:', document.body.scrollHeight);
+          console.log('Window height:', window.innerHeight);
+          console.log('Can scroll:', document.body.scrollHeight > window.innerHeight);
+          
+          // Force scroll to be enabled
+          document.body.style.overflow = '';
+          document.documentElement.style.overflow = '';
+          document.body.style.height = '';
+          document.documentElement.style.height = '';
+          
+          // Kill all GSAP tweens that might be blocking
+          gsap.killTweensOf('.main-content');
+          gsap.killTweensOf('.cover-page');
+          gsap.killTweensOf('.content-placeholder');
+          
+          // Ensure main content is fully interactive
+          const mainContent = document.querySelector('.main-content');
+          if (mainContent) {
+            mainContent.style.pointerEvents = 'auto';
+            mainContent.style.opacity = '1';
+          }
+          
+          console.log('Body overflow:', getComputedStyle(document.body).overflow);
+          console.log('Cleanup complete - scroll should work now');
+          
+          // Force a scroll to ensure it's working
+          window.scrollTo(0, 1);
+          requestAnimationFrame(() => {
+            window.scrollTo(0, 0);
+          });
+        }, 100);
       }
     });
     
