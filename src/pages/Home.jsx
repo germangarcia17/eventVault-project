@@ -392,6 +392,10 @@ const Home = () => {
     // Mark that user has seen the cover in this session
     sessionStorage.setItem('hasSeenCover', 'true');
     
+    // Force enable scrolling immediately
+    document.body.style.overflow = 'auto';
+    document.documentElement.style.overflow = 'auto';
+    
     // Show placeholder for smooth transition
     setShowPlaceholder(true);
     
@@ -401,6 +405,18 @@ const Home = () => {
         setCoverAnimationComplete(true);
         setShowPlaceholder(false);
         isTransitioningRef.current = false;
+        
+        // Force scroll to be enabled after animation completes
+        document.body.style.overflow = 'auto';
+        document.documentElement.style.overflow = 'auto';
+        
+        // Force a small scroll to "wake up" the scroll system
+        window.scrollTo(0, 1);
+        
+        // Then scroll back to top smoothly so user can scroll down
+        setTimeout(() => {
+          window.scrollTo({ top: 0, behavior: 'instant' });
+        }, 0);
       }
     });
     
