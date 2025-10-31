@@ -95,6 +95,68 @@
   gap: 0.5rem;
 }
 
+/* Password input wrapper */
+.passwordWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.passwordWrapper .input {
+  padding-right: 3rem;
+}
+
+.passwordToggle {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: hsl(var(--muted-foreground));
+  transition: all 0.3s ease;
+  border-radius: 0.375rem;
+}
+
+.passwordToggle:hover {
+  color: hsl(var(--primary));
+  background: hsla(var(--primary), 0.1);
+}
+
+.passwordToggle:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.eyeIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Animation when toggling */
+.passwordToggle:active .eyeIcon {
+  animation: eyeBlink 0.3s ease-in-out;
+}
+
+@keyframes eyeBlink {
+  0% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scaleY(0.1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
 .label {
   font-size: 0.875rem;
   font-weight: 600;
