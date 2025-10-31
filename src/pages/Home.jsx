@@ -392,15 +392,58 @@ const Home = () => {
     // Mark that user has seen the cover in this session
     sessionStorage.setItem('hasSeenCover', 'true');
     
+    // Force enable scrolling immediately - must set overflow-y explicitly because CSS has overflow-x: hidden
+    document.body.style.overflowX = 'hidden';
+    document.body.style.overflowY = 'auto';
+    document.documentElement.style.overflowX = 'hidden';
+    document.documentElement.style.overflowY = 'auto';
+    
     // Show placeholder for smooth transition
     setShowPlaceholder(true);
     
     const timeline = gsap.timeline({
       onComplete: () => {
+        console.log('=== TRANSITION COMPLETE ===');
+        
+        // Hide cover and placeholder FIRST so React removes them from DOM
         setShowCover(false);
         setCoverAnimationComplete(true);
         setShowPlaceholder(false);
         isTransitioningRef.current = false;
+        
+        // Wait a moment for React to update DOM, then cleanup
+        setTimeout(() => {
+          console.log('Body height:', document.body.scrollHeight);
+          console.log('Window height:', window.innerHeight);
+          console.log('Can scroll:', document.body.scrollHeight > window.innerHeight);
+          
+          // Force scroll to be enabled - must set overflow-y explicitly because CSS has overflow-x: hidden
+          document.body.style.overflowX = 'hidden';
+          document.body.style.overflowY = 'auto';
+          document.documentElement.style.overflowX = 'hidden';
+          document.documentElement.style.overflowY = 'auto';
+          
+          // Kill all GSAP tweens that might be blocking
+          gsap.killTweensOf('.main-content');
+          gsap.killTweensOf('.cover-page');
+          gsap.killTweensOf('.content-placeholder');
+          
+          // Ensure main content is fully interactive
+          const mainContent = document.querySelector('.main-content');
+          if (mainContent) {
+            mainContent.style.pointerEvents = 'auto';
+            mainContent.style.opacity = '1';
+          }
+          
+          console.log('Body overflow:', getComputedStyle(document.body).overflow);
+          console.log('Cleanup complete - scroll should work now');
+          
+          // Force a scroll to ensure it's working
+          window.scrollTo(0, 1);
+          requestAnimationFrame(() => {
+            window.scrollTo(0, 0);
+          });
+        }, 100);
       }
     });
     
@@ -580,7 +623,7 @@ const Home = () => {
               <span className={styles.eventsSectionBadgeText}>Coming soon...</span>
             </div>
             <h2 className={styles.eventsSectionTitle}>
-              Main <span className={styles.eventsSectionTitleGold}>events</span>
+              Best <span className={styles.eventsSectionTitleGold}>events</span>
             </h2>
             <p className={styles.eventsSectionSubtitle}>
               Dont miss out on these handpicked experiences
