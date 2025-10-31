@@ -41,6 +41,13 @@ const Home = () => {
   const [coverAnimationComplete, setCoverAnimationComplete] = useState(!shouldShowCover());
   const [showPlaceholder, setShowPlaceholder] = useState(false);
 
+  // Ensure body scroll is enabled when cover is not shown
+  useEffect(() => {
+    if (!shouldShowCover()) {
+      document.body.style.overflow = 'auto';
+    }
+  }, []);
+
   useEffect(() => {
     fetchEvents();
   }, []);
@@ -365,6 +372,8 @@ const Home = () => {
       };
     } else if (!showCover && coverAnimationComplete) {
       // If cover is not shown (already seen in session), show content immediately
+      // Ensure body scroll is enabled
+      document.body.style.overflow = 'auto';
       gsap.set('.main-content', { opacity: 1 });
     }
   }, [showCover, loading, coverAnimationComplete]);
@@ -425,7 +434,7 @@ const Home = () => {
         { opacity: 1, duration: 1, ease: 'power2.out' },
         0
       );
-    }, 30); // Small delay to ensure DOM is updated
+    }, 50); // Small delay to ensure DOM is updated
   };
 
   // Function to scroll to main content (triggers cover transition if cover is visible)
