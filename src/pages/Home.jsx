@@ -394,8 +394,9 @@ const Home = () => {
     // Show placeholder immediately
     setShowPlaceholder(true);
     
-    // Re-enable body scroll
+    // Re-enable body scroll immediately
     document.body.style.overflow = 'auto';
+    document.documentElement.style.overflow = 'auto';
     
     // Wait for placeholder to render before starting animation
     setTimeout(() => {
@@ -404,6 +405,9 @@ const Home = () => {
         onComplete: () => {
           setShowCover(false);
           setCoverAnimationComplete(true);
+          // Ensure scroll is enabled after animation completes
+          document.body.style.overflow = 'auto';
+          document.documentElement.style.overflow = 'auto';
           // Hide placeholder after a small delay to ensure content is ready
           setTimeout(() => setShowPlaceholder(false), 100);
         }
