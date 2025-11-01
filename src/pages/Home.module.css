@@ -202,12 +202,15 @@
 .heroSection {
   position: relative;
   width: 100vw;
+  max-width: 100vw;
   margin-left: calc(-50vw + 50%);
   margin-right: calc(-50vw + 50%);
   min-height: 85vh;
   overflow: hidden;
   margin-top: -2rem;
   z-index: 1;
+  left: 0;
+  right: 0;
 }
 
 @media (min-width: 768px) {
